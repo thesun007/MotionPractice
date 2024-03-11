@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-TestGameFeatureRuntime-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\themo\Documents\UnrealProjects\DJGame\Intermediate\Build\Win64\x64\DJGameEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.Cpp20.h.obj"
+"C:\Users\themo\Documents\UnrealProjects\DJGame\Plugins\GameFeatures\TestGameFeature\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\TestGameFeatureRuntime\Module.TestGameFeatureRuntime.cpp.obj"
+"C:\Users\themo\Documents\UnrealProjects\DJGame\Plugins\GameFeatures\TestGameFeature\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\TestGameFeatureRuntime\Default.rc2.res"
+/OUT:"C:\Users\themo\Documents\UnrealProjects\DJGame\Plugins\GameFeatures\TestGameFeature\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\TestGameFeatureRuntime\UnrealEditor-TestGameFeatureRuntime-Win64-DebugGame.lib"
