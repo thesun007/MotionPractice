@@ -53,7 +53,7 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 - `UDJAbilitySystemComponent`(어빌리티 시스템 컴포넌트 확장) : 입력된 태그와 매칭된 어빌리티를 찾고 해당 어빌리티의 작동 방식에 따라 처리하는 기능 추가.
 - `UDJGameplayAbility`(게임플레이 어빌리티 확장) : 어빌리티 실행 작동 방식(입력 시/입력 동안에 계속/스폰 시) 추가.
 - `ADJCharacterPlayer`에서 빙의 할 때, `UPawnData`(데이터 에셋)을 사용하여 [태그-어빌리티] 초기화 및 등록.
-- [구조도] (메모 참고)
+- **[구조도]** (메모 참고)
 <img src="https://github.com/thesun007/metal-slug/assets/39186061/23a056bf-ded7-46c2-ae46-93dd94636f79">
 
 - 빙의 할 때, `ADJCharacterPlayer`에서 어빌리티를 등록하는 `UDJAbilitySet`의 함수 호출
@@ -66,15 +66,19 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 
 ### 태그-인풋 시스템
 [인풋액션-인풋ID-어빌리티] 방식 대신에 라일라 프로젝트 방식인 <ins>[인풋액션-게임플레이 태그-어빌리티]</ins>를 적용.
-
 - `UDJInputComponent`(향상된 인풋 컴포넌트 확장) : 태그와 함께 인풋액션을 바인딩하는 기능 추가.
-- [구조도] (메모 참고)
+- `ADJCharacterPlayer`에서 "SetupPlayerInputComponent(...)" 가 진행될 때, `UDJInputData`(데이터 에셋)을 사용하여 [일반/어빌리티] 인풋액션 바인딩.
+- **[구조도]** (메모 참고)
 <img src="https://github.com/thesun007/metal-slug/assets/39186061/aae61132-d812-4f9b-8d50-2dd988186c29">
+<br/>
+
+- "SetupPlayerInputComponent(...)" 에서 `UDJInputComponent`의 바인딩 함수 호출.
+<img src="https://github.com/thesun007/metal-slug/assets/39186061/dba4b893-a537-4f20-b38e-77065f26486d">
 
 <br/><br/>
 
 ### 풀바디 링크된 레이어 애니메이션 시스템
-애니메이션 블루프린트 링크 시스템을 적용한 라일라 애니메이션을 분석하고 이 기반으로 C++과 블루프린트가 혼합된 애니메이션 시스템 제작.
+<ins>애니메이션 블루프린트 링크 시스템</ins>을 적용한 라일라 애니메이션을 분석하고 이 기반으로 **C++과 블루프린트가 혼합된 애니메이션 시스템** 제작.
 
 ## 2. 기본 이동 모션
 ## 3. 파쿠르
