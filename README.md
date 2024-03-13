@@ -104,7 +104,12 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 ### 추가 코스트 시스템
 
 ### 게임플레이 태그
+c++에서 사용할 태그를 미리 준비.
+- 태그 정의 모음 파일
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/5d2861a3-08e9-4cef-a4e1-203f57173177">
 
+- 또는 태그가 필요한 파일에 태그를 즉석으로 매크로 정의 (예)
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/4cce872c-3f46-4049-9d98-7fa7ef22a792">
 
 <br/><br/>
 
