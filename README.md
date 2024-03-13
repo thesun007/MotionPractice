@@ -116,10 +116,15 @@ c++에서 사용할 태그를 미리 준비.
 --- 
 
 ## 2. 기본 이동 모션
-기본적인 움직임은 라일라 프로젝트 애니메이션 방식을 참고하여 그대로 따랐으므로 매우 유사함.
+기본적인 움직임은 라일라 프로젝트 애니메이션 방식을 참고하여 그대로 따랐으므로 매우 유사함.  
 라일라 프로젝트에서 자연스러운 움직임과 효율적인 개발 환경을 위해 적용한 기술들을 하나씩 분석하여 직접 사용해보며 체득함.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/ecf0cac7-a037-48c0-b6d5-1df53462c7a5">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/0f61e14d-0919-4ac0-8981-0f767b0eb895">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/ba5c4487-3e91-4a89-abd6-817256eb6143">
+
 - 트랜지션 룰 또는 디스턴스 매칭, 포즈 와핑 등 애니메이션 구현을 위해 계산해야 할 데이터는 직접 C++로 나름의 수학적 계산을 통해 제작.
 - 계산 데이터에 따라 트랜지션 룰을 구성하고 실험을 통해 자연스러운 블랜딩 유형(standard/inertialization)과 그래프, 수치를 조절.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/973d7158-a32e-4a67-b80d-21ff7513b345">
 
 <br/><br/>
 
