@@ -98,7 +98,6 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 ### 메시지 라우터 플러그인 
 연결되지 않은 게임플레이 오브젝트가 서로 통신할 수 있도록 하는 게임인스턴스 서브시스템 (`GameplayMessageSubsystem`).
 - 채널(태그)와 구조체로 데이터 통신을 진행하며 C++, 블루프린트 둘 다 활용 가능.
-- 활용 사례 아직 없음. ( Dash 어빌리티에서 쿨타임 데이터 메시지 통신 고려 중)
 
 
 ### 추가 코스트 시스템
@@ -209,7 +208,6 @@ c++에서 사용할 태그를 미리 준비.
 - 일반적인 점프 시 모든 과정을 거치며, 갑작스런 낙하는 점프 최고점 부터 시작한다.
 - 랜딩 과정에는 땅과의 거리를 적용하여 땅에 닿기까지 모션 재생을 조절한다.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/c94f2c23-64fb-4c52-be6c-766d0fe7598a">
-
 <br/><br/>
 
 - 랜딩 시 충격 모션을 추가하는 Additive 레이어가 메인 애님 그래프에 준비되어 있다.
@@ -219,6 +217,23 @@ c++에서 사용할 태그를 미리 준비.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/cab9e6b7-7df3-4937-be95-5231e74ccd8e" width="200px" height="210px">
 </p>
 
+---
+
 ## 3. 파쿠르
+게임플레이 어빌리티로 파쿠르 기능들을 제작.
+<br/>
+
+### Dash
+> Dash는 라일라에서 구현되어있는 작동원리를 보고, 연습삼아 c++로 재구현해본 것입니다.  
+단일 **게임플레이 어빌리티**로 추가. (연계 없음)
+- **PlayMontageAndWait** 태스크와 **ApplyRootMotionConstantForce** 태스크를 이용.
+- 멀티플레이 호완 포함.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/830857b7-ca08-40dc-acea-fa77556d55db" width="250px" height="230px">
+</p>
+<br/><br/>
+
+### Climb/Vaulting
+
 ## 4. 암살 모션
 ## 5. 기타
