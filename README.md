@@ -118,17 +118,85 @@ c++에서 사용할 태그를 미리 준비.
 ## 2. 기본 이동 모션
 기본적인 움직임은 라일라 프로젝트 애니메이션 방식을 참고하여 그대로 따랐으므로 매우 유사함.  
 라일라 프로젝트에서 자연스러운 움직임과 효율적인 개발 환경을 위해 적용한 기술들을 하나씩 분석하여 직접 사용해보며 체득함.
+<**메인 애님 블루프린트**의 애님 그래프>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/ecf0cac7-a037-48c0-b6d5-1df53462c7a5">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/0f61e14d-0919-4ac0-8981-0f767b0eb895">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/ba5c4487-3e91-4a89-abd6-817256eb6143">
 
 - 트랜지션 룰 또는 디스턴스 매칭, 포즈 와핑 등 애니메이션 구현을 위해 계산해야 할 데이터는 직접 C++로 나름의 수학적 계산을 통해 제작.
-- 계산 데이터에 따라 트랜지션 룰을 구성하고 실험을 통해 자연스러운 블랜딩 유형(standard/inertialization)과 그래프, 수치를 조절.
-<img src="https://github.com/thesun007/MotionPractice/assets/39186061/973d7158-a32e-4a67-b80d-21ff7513b345">
+  - 대표적으로 <ins>**현재 움직임 상태 / 방향 / YawOffset**</ins>(root에 적용할 캐릭터 Yaw회전 반대 각도, 즉 액터가 회전해도 캐릭터는 현 방향 유지)
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/8c9dc1f9-0063-4489-99fc-3a8b34dfbb0f">
+
+- 계산 데이터에 따라 애님 그래프의 트랜지션 룰을 구성하고 실험을 통해 자연스러운 블랜딩 유형(standard/inertialization)과 그래프, 수치를 조절.
+- 정확한 트랜지션 조건 적용을 위해 <ins>프레임당 1개로 제한</ins>, 또한 몽타주 ending 과 로코모션의 자연스러운 전환을 위해 <ins>재초기화 비활성</ins>.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/712e3a13-a793-4234-8f0d-537c6ba3bed8">
 
 <br/><br/>
 
 ### Idle/Crouch/Turn
+기본적으로 <ins>**메인 애님 블루프린트**</ins>에서는 링크된 애님 레이어 노드를 하고 필요한 계산을 수행한다.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/ee7a2f69-94aa-42b3-b77a-3e2e61ea3a84">
+- Idle state일 때 필요한 계산은 대표적으로 turn을 한다면 Curve값을 이용하여 진행한 회전 정도에 따라 root rotate에 영향을 미치는 YawOffset을 수정함.
+<br/>
+
+<ins>링크할 애님 레이어를 구현하는 블루프린트</ins>에서는 애니메이션 시퀀스를 선택하고 재생을 조절하는 실질적인 애니메이션 기능을 수행한다.  
+<Turn 샘플>
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/f2c9893e-0e4f-4fb7-a087-2eba2e916ebd">
+- Setup Turn Data (회전할 방향을 구함)
+- On Update Turn ( 계산된 회전 방향에 따라 시퀀스를 선택하고 시간의 흐름대로 재생. 시간 흐름 값은 연속 회전 기능에 활용)
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/d2914159-16ea-4b03-a013-a6120263c2b0">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/93c691f4-138d-4bf7-95af-0f01205e186e" width="200px" height="210px">
+</p>
+
+<br/><br/>
+
+### Start
+<메인 애님 블루프린트> 이동 방향에 따른 기울기 변경 기능 적용.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/31360653-0f49-42f1-8fde-6255e48057fb">
+<br/>
+
+<레이어 애님 블루프린트> **이동한 거리**에 따라 재생시간을 결정하는 <ins>디스턴스 매칭 노드</ins>와 <ins>회전/거리 와핑 노드</ins>를 사용함.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/66d75653-4966-4785-9221-1a8c07a68965">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/2c6bf8e2-c8b8-4952-8f05-7b137102f698">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/39395856-e17d-49b2-9b07-abb50efaa9ef" width="200px" height="210px">
+</p>
+
+<br/><br/>
+
+### Cycle
+기울기 적용, 현재 **이동 속도**에 따라 재생속도를 조절하는 디스턴스 매칭 노드와 회전/거리 와핑 노드 사용.
+매 프레임 이동 방향을 확인하여 애니메이션 결정.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/6740cd9b-77b0-4edc-82b5-6b8a589146e5">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/cd27ee8c-c08c-4faf-866d-8ce4954f0722" width="200px" height="210px">
+</p>
+
+<br/><br/>
+
+### Stop
+정지 예상 거리를 계산해주는 노드를 사용하여 남은 거리에 따라 재생시간을 결정하는 디스턴스 매칭 노드 적용.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/89e5b5f3-dcb3-4049-a872-b6d5b4b730b3">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/a4c8d712-0c7c-4658-bc3b-03d94515c66f">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/9aabb81e-4594-4bd5-a315-95665d770dc4" width="200px" height="210px">
+</p>
+
+<br/><br/>
+
+### Pivot
+<레이어 애님 블루프린트> 연속 Pivot 을 위해 이중 대칭으로 설정.  
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/60a33d60-54f9-41a2-898e-f34ba0913410">
+
+- Pivot 모션에서 방향 전환 전, 속도 0 되기 까지 Distance Match to Target 노드 사용.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/7dbd376f-5ea8-4049-8f1b-5e1d6bfb850d">
+
+- Pivot 모션에서 방향 전환 후, 이동한 거리로 Advance Time by Distance Matching 노드 사용.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/9d32b8e5-4c0f-4e1a-a5c8-5ba422aeb7d2">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/21d5bb7a-0022-4280-bcee-df06727cba95" width="200px" height="210px">
+</p>
 
 ## 3. 파쿠르
 ## 4. 암살 모션
