@@ -131,6 +131,9 @@ c++에서 사용할 태그를 미리 준비.
 - 정확한 트랜지션 조건 적용을 위해 <ins>프레임당 1개로 제한</ins>, 또한 몽타주 ending 과 로코모션의 자연스러운 전환을 위해 <ins>재초기화 비활성</ins>.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/712e3a13-a793-4234-8f0d-537c6ba3bed8">
 
+- 애니메이션 시퀀스 에셋에는 디스턴스 매칭을 위한 Curve가 준비되어 있음.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/309227af-78f8-416f-b67a-c8113308e3bf">
+
 <br/><br/>
 
 ### Idle/Crouch/Turn
@@ -140,8 +143,9 @@ c++에서 사용할 태그를 미리 준비.
 <br/>
 
 <ins>링크할 애님 레이어를 구현하는 블루프린트</ins>에서는 애니메이션 시퀀스를 선택하고 재생을 조절하는 실질적인 애니메이션 기능을 수행한다.  
-<Turn 샘플>
+<Turn 샘플>  
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/f2c9893e-0e4f-4fb7-a087-2eba2e916ebd">
+
 - Setup Turn Data (회전할 방향을 구함)
 - On Update Turn ( 계산된 회전 방향에 따라 시퀀스를 선택하고 시간의 흐름대로 재생. 시간 흐름 값은 연속 회전 기능에 활용)
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/d2914159-16ea-4b03-a013-a6120263c2b0">
@@ -180,7 +184,7 @@ c++에서 사용할 태그를 미리 준비.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/89e5b5f3-dcb3-4049-a872-b6d5b4b730b3">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/a4c8d712-0c7c-4658-bc3b-03d94515c66f">
 <p align="center">
-<img src="https://github.com/thesun007/MotionPractice/assets/39186061/9aabb81e-4594-4bd5-a315-95665d770dc4" width="200px" height="210px">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/28bb28a7-43fe-44e5-a412-d39c98a2a1ad" width="200px" height="210px">
 </p>
 
 <br/><br/>
@@ -196,6 +200,23 @@ c++에서 사용할 태그를 미리 준비.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/9d32b8e5-4c0f-4e1a-a5c8-5ba422aeb7d2">
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/21d5bb7a-0022-4280-bcee-df06727cba95" width="200px" height="210px">
+</p>
+
+<br/><br/>
+
+### Jump/Fall/Landing
+정확히는 모션이 점프시작/점프 중/점프 최고점/낙하 중/랜딩 으로 나뉘어져 있다.
+- 일반적인 점프 시 모든 과정을 거치며, 갑작스런 낙하는 점프 최고점 부터 시작한다.
+- 랜딩 과정에는 땅과의 거리를 적용하여 땅에 닿기까지 모션 재생을 조절한다.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/c94f2c23-64fb-4c52-be6c-766d0fe7598a">
+
+<br/><br/>
+
+- 랜딩 시 충격 모션을 추가하는 Additive 레이어가 메인 애님 그래프에 준비되어 있다.
+- 공중에 있던 시간에 비례해서 Additive 강도를 조절한다.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/1fd1f845-5606-49d0-b909-efbbe58933ab">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/cab9e6b7-7df3-4937-be95-5231e74ccd8e" width="200px" height="210px">
 </p>
 
 ## 3. 파쿠르
