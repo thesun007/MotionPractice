@@ -216,6 +216,13 @@ c++에서 사용할 태그를 미리 준비.
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/cab9e6b7-7df3-4937-be95-5231e74ccd8e" width="200px" height="210px">
 </p>
+<br/>
+
+- 랜딩 시, 이동 상태에 따라 움직임을 연결.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/bb328d8a-85a9-434d-9159-b3c6bdd8f10a">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/4158d971-b538-417f-ab68-82b820b1afe4" width="240px" height="260px">
+</p>
 
 ---
 
@@ -260,13 +267,14 @@ c++에서 사용할 태그를 미리 준비.
 <br/><br/>
 
 ### WallRun
-**`(DJGA_Parkour.h)`** 에서 "점프"중 어빌리티 사용 시, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
+**`(DJGA_Parkour.h)`** 사용 시 "점프"중 이었다면, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
 - **`조건`** : <옆 사선 벽><이동 방향과 이동 입력 방향 일치><속도, 현재 상승 속도 일정 이상 조건>
 - 속도에 따라 보폭 조절을 위해 몽타주가 아닌 링크 레이어 애니메이션으로 모션 실행. <int>(디스턴스 매칭과 Stride Warping 사용)</ins>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/09b3613a-b67a-4692-8e54-0b85f096c4a3">
+
 <br/>
 
-- 실질적인 액터 이동/회전과 진행 중 필요한 계산들은 WallRun 태스크(`DJAT_WallRun.h`)에서 수행.
+- 실질적인 액터 이동/회전과 진행 중 필요한 계산들은 <ins>**WallRun 태스크(`DJAT_WallRun.h`)**</ins> 에서 수행.
 - 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, WallRun 태스크에서 계산한 것을 넘겨 줌.
 > WallRun 시작 시, 현재 속도와 수직 상승 속도에 맞춰서 이동 진행을 한다.  
 > 바닥과 가까워지면 발을 디딛는다. ( WallRun 초기 상승 중일 땐 바닥이 있어도 무시한다.)
@@ -275,7 +283,30 @@ c++에서 사용할 태그를 미리 준비.
 </p>
 
 > 가파르게 떨어지기 시작하면 WallRun을 멈추고 자유낙하한다.  
-> 곡선 벽을 탈 수 있다. (역 곡선은 불가)  
+> 곡선 벽을 탈 수 있다. (역 곡선은 불가)
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/9128ec7f-051e-4093-b097-362f9e6ccc6e" width="290px" height="250px">
+</p>
+<br/><br/>
+
+### Sliding
+달리는 중 일정 속도 이상에서 "앉기"를 누르면 슬라이딩 어빌리티 발동. **`DJGA_Sliding.h`**
+- 발 부분 장애물 체크를 위해 <ins>Tick 기능과 위치 offset 설정 기능</ins>을 더한 TargetActor_Radius 확장 버전을 제작. (`TargetActor_TickableRadius.h`)
+- (지면 각도에 따른 액터회전, 취소 감시, 낙하 감지 등) 어빌리티에 Tick 기능 지원을 위해 델리게이트로 콜백함수를 받아 대신 Tick 실행해주는 어빌리티 태스크 제작.(`DJAT_TickBind`)
+- 현재속도와 오르막/내리막에 따라 초기 속도와 감쇠계수 차등적용.
+- 슬라이딩 중 어빌리디 재 발동 시, 모션 취소.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/0af949a2-b4d2-4f10-ab41-8f0abff7b2e2" width="260px" height="240px">
+</p>
+<br/>
+
+- 슬라이딩 중 낙하 시, 모션 취소.
+- 슬라이딩 중 장애물 충돌 시, 모션 취소.
+- 슬라이딩 후 상단 천장 존재할 시, 앉기.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/53bb5322-eeac-4765-a766-d472ef677652" width="260px" height="240px">
+</p>
+<br/>
 
 ## 4. 암살 모션
 ## 5. 기타
