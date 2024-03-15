@@ -260,6 +260,22 @@ c++에서 사용할 태그를 미리 준비.
 <br/><br/>
 
 ### WallRun
+**`(DJGA_Parkour.h)`** 에서 "점프"중 어빌리티 사용 시, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
+- **`조건`** : <옆 사선 벽><이동 방향과 이동 입력 방향 일치><속도, 현재 상승 속도 일정 이상 조건>
+- 속도에 따라 보폭 조절을 위해 몽타주가 아닌 링크 레이어 애니메이션으로 모션 실행. <int>(디스턴스 매칭과 Stride Warping 사용)</ins>
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/09b3613a-b67a-4692-8e54-0b85f096c4a3">
+<br/>
+
+- 실질적인 액터 이동/회전과 진행 중 필요한 계산들은 WallRun 태스크(`DJAT_WallRun.h`)에서 수행.
+- 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, WallRun 태스크에서 계산한 것을 넘겨 줌.
+> WallRun 시작 시, 현재 속도와 수직 상승 속도에 맞춰서 이동 진행을 한다.  
+> 바닥과 가까워지면 발을 디딛는다. ( WallRun 초기 상승 중일 땐 바닥이 있어도 무시한다.)
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/e6772abc-469a-4884-b404-1a58292ffa1b" width="260px" height="240px">
+</p>
+
+> 가파르게 떨어지기 시작하면 WallRun을 멈추고 자유낙하한다.  
+> 곡선 벽을 탈 수 있다. (역 곡선은 불가)  
 
 ## 4. 암살 모션
 ## 5. 기타
