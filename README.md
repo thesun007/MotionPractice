@@ -335,7 +335,7 @@ c++에서 사용할 태그를 미리 준비.
 암살 어빌리티에서 이벤트를 받으면 실행한 암살 종류에 따라 맞는 모션을 진행하고 랙돌 시뮬레이션을 활성화하여 죽는 설정을 한다.  
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/5b62e304-7da6-451f-a64b-176b87246045">
 <p align="center">
-<img src="https://github.com/thesun007/MotionPractice/assets/39186061/28346411-f7e5-40da-85e5-b12f8afb56e0" width="260px" height="240px">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/28346411-f7e5-40da-85e5-b12f8afb56e0" width="260px" height="270px">
 </p>
 
 ## 5. 기타
