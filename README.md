@@ -115,8 +115,8 @@ c++에서 사용할 태그를 미리 준비.
 --- 
 
 ## 2. 기본 이동 모션
-기본적인 움직임은 라일라 프로젝트 애니메이션 방식을 참고하여 그대로 따랐으므로 매우 유사함.  
-라일라 프로젝트에서 자연스러운 움직임과 효율적인 개발 환경을 위해 적용한 기술들을 하나씩 분석하여 직접 사용해보며 체득함.
+<ins>기본적인 움직임은 **라일라 프로젝트 애니메이션** 방식을 참고하여 그대로 따랐으므로 매우 유사함.</ins>  
+라일라 프로젝트에서 자연스러운 움직임과 효율적인 개발 환경을 위해 적용한 기술들을 하나씩 분석하여 직접 사용해보며 체득함.  
 <**메인 애님 블루프린트**의 애님 그래프>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/ecf0cac7-a037-48c0-b6d5-1df53462c7a5">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/0f61e14d-0919-4ac0-8981-0f767b0eb895">
@@ -192,10 +192,10 @@ c++에서 사용할 태그를 미리 준비.
 <레이어 애님 블루프린트> 연속 Pivot 을 위해 이중 대칭으로 설정.  
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/60a33d60-54f9-41a2-898e-f34ba0913410">
 
-- Pivot 모션에서 방향 전환 전, 속도 0 되기 까지 Distance Match to Target 노드 사용.
+- Pivot 모션 진행 중 방향 전환 전, 속도 0 되기 까지 Distance Match to Target 노드 사용.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/7dbd376f-5ea8-4049-8f1b-5e1d6bfb850d">
 
-- Pivot 모션에서 방향 전환 후, 이동한 거리로 Advance Time by Distance Matching 노드 사용.
+- Pivot 모션 진행 중 방향 전환 후, 이동한 거리로 Advance Time by Distance Matching 노드 사용.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/9d32b8e5-4c0f-4e1a-a5c8-5ba422aeb7d2">
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/21d5bb7a-0022-4280-bcee-df06727cba95" width="200px" height="210px">
@@ -241,7 +241,10 @@ c++에서 사용할 태그를 미리 준비.
 <br/><br/>
 
 ### Mantling/Vaulting
-장애물 높이와 깊이에 따라 상황에 맞는 모션이 발생하도록 함.   **`(DJGA_Parkour.h)`**
+1. <ins>**모션 와핑**</ins> 을 활용하여 파쿠르 중 위치해야할 지점을 적용.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/03a1f10b-1ba5-4b04-bc8a-e38a2a2a1171">
+
+3. 장애물 높이와 깊이에 따라 상황에 맞는 모션이 발생하도록 함.   **`(DJGA_Parkour.h)`**
 > 시스템  계산상 구분을 해놓았지만 모션 종류 부족으로 "낮음"과 "중간" 모션이 동일함.
 
 |높이 \ 깊이|얕음|중간|깊음|
@@ -256,7 +259,7 @@ c++에서 사용할 태그를 미리 준비.
 </p>
 <br/>
 
-- "점프" 중에 어빌리티 사용 시, 모서리에 부딪 몸의 높이에 따라서 높게 오르기 모션 시작 지점을 조절하여 오르는 행동 구현.
+- "점프" 중에 `(DJGA_Parkour.h)`어빌리티 사용 시, 모서리에 부딪 몸의 높이에 따라서 높게 오르기 모션 시작 지점을 조절하여 오르는 행동 구현.
 - 이를 위해 시퀀스 에셋에서 root 기준 발의 높이를 구한 커브 데이터를 뽑음.  
 **`(DistanceBoneModifier.h)`** ( 기존 엔진의 DistanceCurveModifier 를 개량)
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/269c39af-8b64-4199-82cd-d4d2483612fb">
@@ -267,7 +270,7 @@ c++에서 사용할 태그를 미리 준비.
 <br/><br/>
 
 ### WallRun
-**`(DJGA_Parkour.h)`** 사용 시 "점프"중 이었다면, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
+"점프" 중에 `(DJGA_Parkour.h)`어빌리티 사용 시, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
 - **`조건`** : <옆 사선 벽><이동 방향과 이동 입력 방향 일치><속도, 현재 상승 속도 일정 이상 조건>
 - 속도에 따라 보폭 조절을 위해 몽타주가 아닌 링크 레이어 애니메이션으로 모션 실행. <int>(디스턴스 매칭과 Stride Warping 사용)</ins>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/09b3613a-b67a-4692-8e54-0b85f096c4a3">
@@ -275,8 +278,8 @@ c++에서 사용할 태그를 미리 준비.
 <br/>
 
 - 실질적인 액터 이동/회전과 진행 중 필요한 계산들은 <ins>**WallRun 태스크(`DJAT_WallRun.h`)**</ins> 에서 수행.
-- 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, WallRun 태스크에서 계산한 것을 넘겨 줌.
-> WallRun 시작 시, 현재 속도와 수직 상승 속도에 맞춰서 이동 진행을 한다.  
+- 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, **WallRun 태스크**에서 필요 값을 계산하고 넘겨 줌.
+> WallRun 시작 시, 현재 속도와 수직 상승 속도를 고려하여 이동한다.  
 > 바닥과 가까워지면 발을 디딛는다. ( WallRun 초기 상승 중일 땐 바닥이 있어도 무시한다.)
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/e6772abc-469a-4884-b404-1a58292ffa1b" width="260px" height="240px">
@@ -306,7 +309,34 @@ c++에서 사용할 태그를 미리 준비.
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/53bb5322-eeac-4765-a766-d472ef677652" width="260px" height="240px">
 </p>
-<br/>
+<br/><br/>
 
 ## 4. 암살 모션
+1. <ins>"**암살 어빌리티**"</ins>와 <ins>"**암살 피해 어빌리티**"</ins> 로 암살 상호작용 구성.  
+2. 게임플레이 어빌리티의 확장 기능인 실행 타입을 `OnSpawn`으로 하여 <ins>**어빌리티가 등록되면 바로 활성화**</ins> 되도록 설정.  
+  - **<암살 어빌리티>** 가 활성화 되면, `DJAT_Trigger.h`를 이용하여 매 Tick에 **TargetActorData**를 얻어 암살 가능 대상을 추적한다.
+    - `DJAT_Trigger.h` : 기존 "**WaitTargetData 태스크**"에 매 프레임 TargetActor 컨펌을 진행하는 기능을 추가한 <ins>어빌리티 태스크</ins>.
+    - (`DJAT_Trigger.h`는 `TargetActor_TickableRadius.h`처럼 TargetActor가 직접 매 프레임 Data를 전송하는 방법 대신, <ins>Task에서 매 프레임 Confirm을 진행</ins>하여 TargetActor로부터 Data 수신.)
+
+<br/>
+
+### 암살 어빌리티 
+`DJGA_Assassination.h`  
+활성화 중인 이 어빌리티에서 InputPressed 가 발생되면 등록된 암살 몽타주 중 랜덤으로 암살을 진행하며, 타이밍을 맞춰 **암살 피해 어빌리티** 에 관련 정보와 함께 이벤트 전송하여 상대가
+암살 피해 모션을 진행하도록 유도한다.
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/c0547750-2e65-4d93-8e69-659851582364">
+
+- `Type` : 몽타주가 실행될 수 있는 상대 위치에 대한 정보.
+- `Sync Position` : 몽타주 실행 시 최종적으로 위치해야할 피해 대상 액터 기준 <ins>상대 좌표</ins>.
+
+<br/>
+
+### 암살 피해 어빌리티 
+`DJGA_AssassinationVictim.h`  
+암살 어빌리티에서 이벤트를 받으면 실행한 암살 종류에 따라 맞는 모션을 진행하고 랙돌 시뮬레이션을 활성화하여 죽는 설정을 한다.  
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/5b62e304-7da6-451f-a64b-176b87246045">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/28346411-f7e5-40da-85e5-b12f8afb56e0" width="260px" height="240px">
+</p>
+
 ## 5. 기타
