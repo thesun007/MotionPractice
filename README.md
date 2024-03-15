@@ -224,8 +224,8 @@ c++에서 사용할 태그를 미리 준비.
 <br/>
 
 ### Dash
-> Dash는 라일라에서 구현되어있는 작동원리를 보고, 연습삼아 c++로 재구현해본 것입니다.  
-단일 **게임플레이 어빌리티**로 추가. (연계 없음)
+> Dash는 라일라 프로젝트와 거의 동일. c++로 재구성하면서 어빌리티 활용방법 파악.
+
 - **PlayMontageAndWait** 태스크와 **ApplyRootMotionConstantForce** 태스크를 이용.
 - 멀티플레이 호완 포함.
 <p align="center">
@@ -233,7 +233,33 @@ c++에서 사용할 태그를 미리 준비.
 </p>
 <br/><br/>
 
-### Climb/Vaulting
+### Mantling/Vaulting
+장애물 높이와 깊이에 따라 상황에 맞는 모션이 발생하도록 함.   **`(DJGA_Parkour.h)`**
+> 시스템  계산상 구분을 해놓았지만 모션 종류 부족으로 "낮음"과 "중간" 모션이 동일함.
+
+|높이 \ 깊이|얕음|중간|깊음|
+|------|---|---|---|
+|낮음|짧은 넘기|디딛고 넘기|낮게 오르기|
+|중간|짧은 넘기|디딛고 넘기|낮게 오르기|
+|높음|높게 오르기|높게 오르기|높게 오르기|
+<br/>
+
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/219e070e-1a98-4733-a3ad-39acb4e8e6a3" width="250px" height="230px">
+</p>
+<br/>
+
+- "점프" 중에 어빌리티 사용 시, 모서리에 부딪 몸의 높이에 따라서 높게 오르기 모션 시작 지점을 조절하여 오르는 행동 구현.
+- 이를 위해 시퀀스 에셋에서 root 기준 발의 높이를 구한 커브 데이터를 뽑음.  
+**`(DistanceBoneModifier.h)`** ( 기존 엔진의 DistanceCurveModifier 를 개량)
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/269c39af-8b64-4199-82cd-d4d2483612fb">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/deb087a3-b272-4744-a8b8-dfb77a89aaf6">
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/b0ef5a48-19af-40ba-ab8c-d3a379d76b86" width="250px" height="280px">
+</p>
+<br/><br/>
+
+### WallRun
 
 ## 4. 암살 모션
 ## 5. 기타
