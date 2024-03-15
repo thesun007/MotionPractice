@@ -316,8 +316,7 @@ c++에서 사용할 태그를 미리 준비.
 2. 게임플레이 어빌리티의 확장 기능인 실행 타입을 `OnSpawn`으로 하여 <ins>**어빌리티가 등록되면 바로 활성화**</ins> 되도록 설정.  
   - **<암살 어빌리티>** 가 활성화 되면, `DJAT_Trigger.h`를 이용하여 매 Tick에 **TargetActorData**를 얻어 암살 가능 대상을 추적한다.
     - `DJAT_Trigger.h` : 기존 "**WaitTargetData 태스크**"에 매 프레임 TargetActor 컨펌을 진행하는 기능을 추가한 <ins>어빌리티 태스크</ins>.
-    - (`DJAT_Trigger.h`는 `TargetActor_TickableRadius.h`처럼 TargetActor가 직접 매 프레임 Data를 전송하는 방법 대신, <ins>Task에서 매 프레임 Confirm을 진행</ins>하여 TargetActor로부터 Data 수신.)
-
+    - (`DJAT_Trigger.h`는 `TargetActor_TickableRadius.h`처럼 TargetActor가 직접 매 프레임 Data를 전송하는 방법 대신, <ins>Task에서 매 프레임 Confirm을 진행</ins>하여 TargetActor로부터 Data 수신.) (다양한 시도 목적)
 <br/>
 
 ### 암살 어빌리티 
