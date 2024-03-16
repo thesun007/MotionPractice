@@ -19,7 +19,7 @@ public:
 
 	//~UCameraComponent interface
 	virtual void InitializeComponent() override;
-	virtual void GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView);
+	virtual void GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView);	//매 프레임 호출됨(최종 카메라 transform 적용 장소)
 	//~
 
 	// Returns the camera component if one exists on the specified actor.
@@ -33,9 +33,9 @@ private:
 
 	float AppliedCapsuleHalfHeight;
 
-	float ApplyCapsuleHalfHeight;
+	float ApplyCapsuleHalfHeight;	//높이 변화시, 더할 보간값의 초기값
 	float BlendWeightHalfHeight;
-	float FinalDelta;	//보간 이동 거리 (0 목표)
+	float FinalDelta;				//최종 적용할 보간 이동 거리 (0 목표)
 
-	FVector InitLocalLocation;
+	FVector InitLocalLocation;		//가장 초기 카메라 로컬 위치
 };

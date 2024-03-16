@@ -93,7 +93,7 @@ void UDJAbilitySet::GiveToAbilitySystem(UDJAbilitySystemComponent* ASC, FDJAbili
 		AbilitySpec.SourceObject = SourceObject;
 		AbilitySpec.DynamicAbilityTags.AddTag(AbilityToGrant.InputTag);
 
-		const FGameplayAbilitySpecHandle AbilitySpecHandle = ASC->GiveAbility(AbilitySpec);
+		const FGameplayAbilitySpecHandle AbilitySpecHandle = ASC->GiveAbility(AbilitySpec);		//어빌리티 등록!
 
 		if (OutGrantedHandles)
 		{
@@ -135,7 +135,7 @@ void UDJAbilitySet::GiveToAbilitySystem(UDJAbilitySystemComponent* ASC, FDJAbili
 		}
 
 		UAttributeSet* NewSet = NewObject<UAttributeSet>(ASC->GetOwner(), SetToGrant.AttributeSet);
-		ASC->AddAttributeSetSubobject(NewSet);
+		ASC->AddAttributeSetSubobject(NewSet);	//어트리뷰트 추가 등록!!
 
 		if (OutGrantedHandles)
 		{

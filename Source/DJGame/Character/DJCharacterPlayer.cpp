@@ -75,28 +75,28 @@ void ADJCharacterPlayer::BeginPlay()
 
 	// Local Controller일 떄, PostInitial -> 빙의 -> BeginPlay()
 	// 따라서 BeginPlay() 이후에 컨트롤러에 접근해 맵핑 컨텍스트 작업
-	FTimerHandle handle2;
-	GetWorld()->GetTimerManager().SetTimer(handle2, FTimerDelegate::CreateLambda(
-		[&]()
-		{
-			/*FVector accel = GetCharacterMovement()->GetCurrentAcceleration();
-			FVector velo = GetCharacterMovement()->Velocity;
-			UE_LOG(LogTemp, Log, TEXT("accel [%f, %f, %f] / velocity [%f, %f, %f] / speed [%f]"), accel.X, accel.Y, accel.Z, velo.X, velo.Y, velo.Z, velo.Length());*/
+	//FTimerHandle handle2;
+	//GetWorld()->GetTimerManager().SetTimer(handle2, FTimerDelegate::CreateLambda(
+	//	[&]()
+	//	{
+	//		FVector accel = GetCharacterMovement()->GetCurrentAcceleration();
+	//		FVector velo = GetCharacterMovement()->Velocity;
+	//		//UE_LOG(LogTemp, Log, TEXT("accel [%f, %f, %f] / velocity [%f, %f, %f] / speed [%f]"), accel.X, accel.Y, accel.Z, velo.X, velo.Y, velo.Z, velo.Length());
+	//		UE_LOG(LogTemp, Log, TEXT("2D Speed : %f"), velo.Size2D() );
+	//		//현재 지면 기울기와 정면의 각도차
+	//		//FVector StartPos = GetActorLocation();   //캐릭터 위치
+	//		//FVector EndPos = StartPos - GetActorUpVector() * 1000;   // 아래 방향 위치
 
-			//현재 지면 기울기와 정면의 각도차
-			//FVector StartPos = GetActorLocation();   //캐릭터 위치
-			//FVector EndPos = StartPos - GetActorUpVector() * 1000;   // 아래 방향 위치
+	//		//FHitResult HitResult;
+	//		//FCollisionQueryParams QueryParams(SCENE_QUERY_STAT(CheckWall), false, this);
+	//		//bool Hit = GetWorld()->LineTraceSingleByObjectType(HitResult, StartPos, EndPos, FCollisionObjectQueryParams::AllStaticObjects, QueryParams);
+	//		//if (Hit)
+	//		//{
+	//		//	UE_LOG(LogTemp, Log, TEXT("ground dot : %f"), HitResult.ImpactNormal.Dot(GetActorForwardVector()));
+	//		//}
 
-			//FHitResult HitResult;
-			//FCollisionQueryParams QueryParams(SCENE_QUERY_STAT(CheckWall), false, this);
-			//bool Hit = GetWorld()->LineTraceSingleByObjectType(HitResult, StartPos, EndPos, FCollisionObjectQueryParams::AllStaticObjects, QueryParams);
-			//if (Hit)
-			//{
-			//	UE_LOG(LogTemp, Log, TEXT("ground dot : %f"), HitResult.ImpactNormal.Dot(GetActorForwardVector()));
-			//}
-
-		}
-	), 0.016f, true, -1.0f);
+	//	}
+	//), 0.016f, true, -1.0f);
 }
 
 void ADJCharacterPlayer::PossessedBy(AController* NewController)
@@ -201,11 +201,11 @@ void ADJCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 					// Add the key mappings that may have been set by the player
 					DJIC->AddInputMappings(InputData, Subsystem);
 
-					// This is where we actually bind and input action to a gameplay tag, which means that Gameplay Ability Blueprints will
-					// be triggered directly by these input actions Triggered events. 
+					//어빌리티 입력 바인딩
 					TArray<uint32> BindHandles;
 					DJIC->BindAbilityActions(InputData, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, /*out*/ BindHandles);
 					
+					//일반 입력 바인딩
 					DJIC->BindNativeAction(InputData, InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, /*bLogIfNotFound=*/ false);
 					DJIC->BindNativeAction(InputData, InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, /*bLogIfNotFound=*/ false);
 					//DJIC->BindNativeAction(InputData, InputTag_Look_Stick, ETriggerEvent::Triggered, this, &ThisClass::Input_LookStick, /*bLogIfNotFound=*/ false);

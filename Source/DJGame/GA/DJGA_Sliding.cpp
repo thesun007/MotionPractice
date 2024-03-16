@@ -11,7 +11,7 @@
 #include "AT/DJAT_Trigger.h"
 #include "GA/TA/TargetActor_TickableRadius.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "DJAT_TickBind.h"
+#include "AT/DJAT_TickBind.h"
 
 UE_DEFINE_GAMEPLAY_TAG(TAG_InputTag_Sliding, "InputTag.Ability.Sliding");
 UE_DEFINE_GAMEPLAY_TAG(TAG_AbilityType_Action_Sliding, "Ability.Type.Action.Sliding");
@@ -95,8 +95,9 @@ void UDJGA_Sliding::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 			CancelAbility(Handle, ActorInfo, ActivationInfo, true);
 			return;
 		}
-		float Magnitude = CurrentFloorAngle / MaxFloorAngle * 0.5f;					//(-0.5 ~ 0.5) (내리막길 ~ 오르막길)
-		FinalDeceleration = Deceleration + (Magnitude * Deceleration);				//최종 감쇠계수
+		float Magnitude = CurrentFloorAngle / MaxFloorAngle ;					//(-0.5 ~ 0.5) (내리막길 ~ 오르막길)
+		//**최종 감쇠계수**//
+		FinalDeceleration = Deceleration + (Magnitude * Deceleration);				
 		FVector FinalDir = GroundNormal.Cross(LastInputDir).Cross(GroundNormal);	//<기울기쪽으로 변형된 최종 진행 방향> 법선과 진행 방향에 대한 오른쪽 벡터를 구하고, 다시 법선과 외적
 
 
@@ -181,6 +182,7 @@ void UDJGA_Sliding::StartEnding()
 {
 	Movement->RemoveRootMotionSource(FName("SlidingMove"));
 	MontageJumpToSection("End");
+	
 	IsEnding = true;
 }
 
@@ -200,6 +202,8 @@ void UDJGA_Sliding::CheckUpper()
 	}
 	else
 		Character->UnCrouch();
+
+	Movement->BrakingDecelerationWalking = OriginalDeceleration;
 }
 
 void UDJGA_Sliding::OnGetTargetCallback(const FGameplayAbilityTargetDataHandle& TargetDataHandle)

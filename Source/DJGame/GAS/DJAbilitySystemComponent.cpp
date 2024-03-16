@@ -35,17 +35,17 @@ void UDJAbilitySystemComponent::CancelAbilitiesByFunc(TShouldCancelAbilityFunc S
 			TArray<UGameplayAbility*> Instances = AbilitySpec.GetAbilityInstances();
 			for (UGameplayAbility* AbilityInstance : Instances)
 			{
-				UDJGameplayAbility* LyraAbilityInstance = CastChecked<UDJGameplayAbility>(AbilityInstance);
+				UDJGameplayAbility* DJAbilityInstance = CastChecked<UDJGameplayAbility>(AbilityInstance);
 
-				if (ShouldCancelFunc(LyraAbilityInstance, AbilitySpec.Handle))
+				if (ShouldCancelFunc(DJAbilityInstance, AbilitySpec.Handle))
 				{
-					if (LyraAbilityInstance->CanBeCanceled())
+					if (DJAbilityInstance->CanBeCanceled())
 					{
-						LyraAbilityInstance->CancelAbility(AbilitySpec.Handle, AbilityActorInfo.Get(), LyraAbilityInstance->GetCurrentActivationInfo(), bReplicateCancelAbility);
+						DJAbilityInstance->CancelAbility(AbilitySpec.Handle, AbilityActorInfo.Get(), DJAbilityInstance->GetCurrentActivationInfo(), bReplicateCancelAbility);
 					}
 					else
 					{
-						DJ_LOG(DJLog, Error, TEXT("CancelAbilitiesByFunc: Can't cancel ability [%s] because CanBeCanceled is false."), *LyraAbilityInstance->GetName());
+						DJ_LOG(DJLog, Error, TEXT("CancelAbilitiesByFunc: Can't cancel ability [%s] because CanBeCanceled is false."), *DJAbilityInstance->GetName());
 					}
 				}
 			}

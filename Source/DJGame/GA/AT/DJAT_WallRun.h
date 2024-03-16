@@ -60,6 +60,7 @@ private:
 	TObjectPtr<class ADJCharacterBase> Character;
 	UPROPERTY()
 	TObjectPtr<class UDJAnimInstance> AnimInstance;
+	//인터페이스를 변수로 가지는 방법.
 	UPROPERTY()
 	TScriptInterface<class IAnimSourceSetInterface> AnimSourceSetInterface;
 

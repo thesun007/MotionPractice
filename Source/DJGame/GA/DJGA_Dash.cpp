@@ -111,7 +111,7 @@ void UDJGA_Dash::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 
 		//게임플레이 큐 실행
 
-		//위젯 메시지 (남은시간 전송)
+		//위젯 메시지 (쿨타임 남은시간 전송)
 		UGameInstance* GameInstance = GetWorld()->GetGameInstance();
 		UGameplayMessageSubsystem* MySubsystem = GameInstance->GetSubsystem<UGameplayMessageSubsystem>();
 		//UGameplayMessageSubsystem::Get(GetWorld());

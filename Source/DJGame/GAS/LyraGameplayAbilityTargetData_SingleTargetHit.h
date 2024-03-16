@@ -22,7 +22,7 @@ struct FLyraGameplayAbilityTargetData_SingleTargetHit : public FGameplayAbilityT
 
 	virtual void AddTargetDataToContext(FGameplayEffectContextHandle& Context, bool bIncludeActorArray) const override;
 
-	/** ID to allow the identification of multiple bullets that were part of the same cartridge */
+	/** 동일한 카트리지에 포함된 여러 총알을 식별할 수 있는 ID */
 	UPROPERTY()
 	int32 CartridgeID;
 

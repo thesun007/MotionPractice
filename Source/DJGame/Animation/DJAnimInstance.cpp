@@ -51,6 +51,7 @@ void UDJAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	if (!OwnerChar)
 		return;
 
+	//데이터 갱신
 	UpdateLocation(DeltaSeconds);
 	UpdateVelocity();
 	UpdateYawOffset(DeltaSeconds); 
@@ -232,7 +233,7 @@ void UDJAnimInstance::UpdateYawOffset(float DeltaSeconds)
 	float currentYaw = OwnerChar->GetActorRotation().Yaw;
 	YawDelta = currentYaw - BeforeYaw;
 	BeforeYaw = currentYaw;
-	YawSpeed = YawDelta / DeltaSeconds * 0.035;	// 0.035 임시
+	YawSpeed = YawDelta / DeltaSeconds * 0.035;	// 보정 0.035 임시
 	//UE_LOG(LogTemp, Log, TEXT("YawSpeed : %f"), YawSpeed);
 	if (GetCurrentActiveMontage() != nullptr)		//몽타주 실행중이 아니면 BlendOut
 	{
@@ -263,8 +264,9 @@ void UDJAnimInstance::SetYawOffset(float inYawOffset)
 	else
 		YawOffset = FMath::ClampAngle(FRotator::NormalizeAxis(inYawOffset), YawOffestClamp.X, YawOffestClamp.Y);
 	
+	//YawOffset은 카메라 각도의 반대. 따라서 Aim값에는 다시 -를 붙임.
 	AimYaw = -YawOffset;
-	AimPitch = FRotator::NormalizeAxis(OwnerChar->GetControlRotation().Pitch); /*OwnerChar->GetBaseAimRotation().Pitch*/
+	AimPitch = FRotator::NormalizeAxis(OwnerChar->GetControlRotation().Pitch);
 }
 
 void UDJAnimInstance::ProcessTurnCurve()
@@ -283,10 +285,12 @@ void UDJAnimInstance::ProcessTurnCurve()
 	float RemainingTurnYaw = 0.f;
 	GetCurveValue(TEXT("RemainingTurnYaw"), RemainingTurnYaw);
 
+	//남은 회전값 갱신
 	CurrentTurnCurveValue = RemainingTurnYaw / TurnYawWeight;
 
 	if (PreviousTurnCurveValue != 0.f)
 	{
+		//한 프레임 회전한 정도.
 		float TurnDelta = PreviousTurnCurveValue -CurrentTurnCurveValue;
 
 		SetYawOffset(YawOffset + TurnDelta);

@@ -325,7 +325,7 @@ void UDJGA_Parkour::TryWallRun(FHitResult& Result, bool Left)
 
 	/* 벽 타기 시작 */
 	UDJAT_WallRun* WallRun = UDJAT_WallRun::CreateWallRunTask(this, FName("WallRunTask"), Result.ImpactPoint, Result.ImpactNormal, Left, 
-		Character->GetCapsuleComponent()->GetScaledCapsuleRadius()+8);
+		Character->GetCapsuleComponent()->GetScaledCapsuleRadius()+5);
 
 	if (WallRun == nullptr)
 	{

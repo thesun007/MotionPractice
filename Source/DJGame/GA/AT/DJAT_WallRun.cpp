@@ -28,7 +28,7 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         //장애물 막힘 확인 로직
         FVector ActorPos2D = Character->GetActorLocation(); 
         ActorPos2D.Z = 0;
-        if ((BeforePosition2D - ActorPos2D).SquaredLength() < 1)    //이동을 거의 못했으면..
+        if ((BeforePosition2D - ActorPos2D).SquaredLength() < 0.5f)    //이동을 거의 못했으면..
         {
             UE_LOG(LogTemp, Log, TEXT("on Blocking"));
             OnCanceled();
@@ -38,7 +38,7 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         
         /*다음 위치 계산*/
         //예상 높이 계산 (약 포물선 이동)
-        CurrentVirSpeed += (Character->GetCharacterMovement()->GetGravityZ()*0.33f ) * DeltaTime;    //중력(1/4) 적용
+        CurrentVirSpeed += (Character->GetCharacterMovement()->GetGravityZ()*0.4f ) * DeltaTime;    //중력(1/2.5) 적용
         float DeltaZ = CurrentVirSpeed * DeltaTime; //더할 Z 값
         
         //떨어지는 속도가 빨라지면 종료
@@ -98,7 +98,7 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         Displacement2D.Z = 0;
         AnimSourceSetInterface->SetDisplacementSpeedWithWall(Displacement2D.Length() / DeltaTime); 
         CurrentWallPosition = HitResult.ImpactPoint;    //벽 포인트 위치 갱신
-
+        //UE_LOG(LogTemp, Log, TEXT("2D Speed : %f"), Displacement2D.Length() / DeltaTime);
 
         /* 착지 가능 위치 체크 */
         FHitResult GroundHitResult;
@@ -219,9 +219,10 @@ void UDJAT_WallRun::Activate()
 
     //초기 스피드 가져오기
     FVector CurrentVelocity2D = Character->GetCharacterMovement()->Velocity;
-    CurrentVirSpeed = FMath::Min( CurrentVelocity2D.Z +70.0, 140.0); //수직 스피드 (+상승보정)
+    CurrentVirSpeed = FMath::Min( CurrentVelocity2D.Z +100.0, 200.0); //수직 스피드 (+상승보정)
     CurrentVelocity2D.Z = 0;
     CurrentSpeed = FMath::Min(FMath::Max(CurrentVelocity2D.Length()+150, 450.0), Character->GetCharacterMovement()->GetMaxSpeed());  //수평 스피드 (최소 450, 최대 maxSpeed)
+    Character->GetCharacterMovement()->Velocity = FVector::ZeroVector;
     //UE_LOG(LogTemp, Log, TEXT("MaxSpeed : %f,  CurrentSpeed : %f"), Character->GetCharacterMovement()->GetMaxSpeed(), CurrentSpeed);
    
     //아바타 시작 방향 초기화

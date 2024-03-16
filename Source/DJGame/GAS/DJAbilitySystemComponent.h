@@ -17,7 +17,7 @@ class DJGAME_API UDJAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	UDJAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	typedef TFunctionRef<bool(const class UDJGameplayAbility* LyraAbility, FGameplayAbilitySpecHandle Handle)> TShouldCancelAbilityFunc;
+	typedef TFunctionRef<bool(const class UDJGameplayAbility* Ability, FGameplayAbilitySpecHandle Handle)> TShouldCancelAbilityFunc;
 	void CancelAbilitiesByFunc(TShouldCancelAbilityFunc ShouldCancelFunc, bool bReplicateCancelAbility);
 
 	void CancelInputActivatedAbilities(bool bReplicateCancelAbility);
