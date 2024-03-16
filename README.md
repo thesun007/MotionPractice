@@ -115,18 +115,18 @@ c++에서 사용할 태그를 미리 준비.
 --- 
 
 ## 2. 기본 이동 모션
-<ins>기본적인 움직임은 **라일라 프로젝트 애니메이션** 방식을 참고하여 그대로 따랐으므로 매우 유사함.</ins>  
+<ins>기본적인 움직임은 **라일라 프로젝트 애니메이션** 방식을 참고하여 그대로 따랐으므로 거의 같음.</ins>  
 라일라 프로젝트에서 자연스러운 움직임과 효율적인 개발 환경을 위해 적용한 기술들을 하나씩 분석하여 직접 사용해보며 체득함.  
 <**메인 애님 블루프린트**의 애님 그래프>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/ecf0cac7-a037-48c0-b6d5-1df53462c7a5">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/0f61e14d-0919-4ac0-8981-0f767b0eb895">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/ba5c4487-3e91-4a89-abd6-817256eb6143">
 
-- 트랜지션 룰 또는 디스턴스 매칭, 포즈 와핑 등 애니메이션 구현을 위해 계산해야 할 데이터는 직접 C++로 나름의 수학적 계산을 통해 제작.
+- 트랜지션 룰 또는 디스턴스 매칭, 포즈 와핑 등 애니메이션 구현을 위해 <ins>계산해야 할 데이터는 직접 C++로 나름의 수학적 계산을 통해 제작.</ins>
   - 대표적으로 <ins>**현재 움직임 상태 / 방향 / YawOffset**</ins>(root에 적용할 캐릭터 Yaw회전 반대 각도, 즉 액터가 회전해도 캐릭터는 현 방향 유지)
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/8c9dc1f9-0063-4489-99fc-3a8b34dfbb0f">
 
-- 계산 데이터에 따라 애님 그래프의 트랜지션 룰을 구성하고 실험을 통해 자연스러운 블랜딩 유형(standard/inertialization)과 그래프, 수치를 조절.
+- 계산된 데이터에 따라 애님 그래프의 트랜지션 룰을 구성하고 실험을 통해 자연스러운 블랜딩 유형(standard/inertialization)과 그래프, 수치를 조절.
 - 정확한 트랜지션 조건 적용을 위해 <ins>프레임당 1개로 제한</ins>, 또한 몽타주 ending 과 로코모션의 자연스러운 전환을 위해 <ins>재초기화 비활성</ins>.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/712e3a13-a793-4234-8f0d-537c6ba3bed8">
 
@@ -198,7 +198,7 @@ c++에서 사용할 태그를 미리 준비.
 - Pivot 모션 진행 중 방향 전환 후, 이동한 거리로 Advance Time by Distance Matching 노드 사용.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/9d32b8e5-4c0f-4e1a-a5c8-5ba422aeb7d2">
 <p align="center">
-<img src="https://github.com/thesun007/MotionPractice/assets/39186061/21d5bb7a-0022-4280-bcee-df06727cba95" width="200px" height="210px">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/21d5bb7a-0022-4280-bcee-df06727cba95" width="220px" height="230px">
 </p>
 
 <br/><br/>
@@ -223,6 +223,18 @@ c++에서 사용할 태그를 미리 준비.
 <p align="center">
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/4158d971-b538-417f-ab68-82b820b1afe4" width="240px" height="260px">
 </p>
+
+<br/><br/>
+
+### AimOffset
+카메라 방향으로 고개를 돌림. (현재 비무장 모션만 있으므로)
+- additive setting [mesh space] 설정되어 있음.
+- aimoffset player 노드 사용.
+- root rotate 기준 회전값이므로 "YawOffset"을 활용하며, pitch는 "contolRotation"을 그대로 사용.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/0e9ba01a-ae78-4efc-8f4f-ee9c96ddf6b4" width="240px" height="270px">
+</p>
+<br/><br/>
 
 ---
 
@@ -338,4 +350,15 @@ c++에서 사용할 태그를 미리 준비.
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/28346411-f7e5-40da-85e5-b12f8afb56e0" width="260px" height="270px">
 </p>
 
+<br/><br/>
+
+---
 ## 5. 기타
+### 카메라 수직이동 보정
+앉기 모션 진행시 Capsule Component가 변경됨으로서 카메라가 순간 수직이동 현상이 나타남.  
+따라서 Camera Component를 따로 제작하여 수직이동 보정을 추가함. `DJCameraComponent.h`
+- 2중 보간(선형보간 + EaseOut보간) 사용하여 처음엔 빠르다가 점점 느려지는 카메라 이동 적용.
+- 연속 높이 변화(ex 앉다가 중간에 일어나기) 정상 처리.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/6da0e7c3-81d2-4302-9f93-1d92492dbdfd" width="260px" height="270px">
+</p>
