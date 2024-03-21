@@ -61,6 +61,7 @@ void UDistanceBoneModifier::OnApply_Implementation(UAnimSequence* Animation)
 	NumSteps = FMath::CeilToInt(AnimLength / SampleInterval);
 	float Time = 0.0f;
 
+	//각 시간대별로 모두 순환
 	for (int32 Step = 0; Step <= NumSteps && Time < AnimLength; ++Step)
 	{
 		Time = FMath::Min(Step * SampleInterval, AnimLength);
@@ -73,6 +74,7 @@ void UDistanceBoneModifier::OnApply_Implementation(UAnimSequence* Animation)
 
 		FVector BonePose = FVector::ZeroVector;
 		int32 BoneIndex = Animation->GetSkeleton()->GetReferenceSkeleton().FindBoneIndex(BoneName);
+		//목표 Bone에서 부터 root(0)까지 올라가며 부모기준으로 Transform 변환
 		while (BoneIndex >= 0)
 		{
 			//현재 본의 로컬 트랜스폼 (부모기준 트랜스폼) (즉, 로컬 좌표를 부모기준 좌표로 변환 함)
