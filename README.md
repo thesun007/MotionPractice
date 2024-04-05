@@ -281,7 +281,7 @@ c++에서 사용할 태그를 미리 준비.
 <br/><br/>
 
 ### WallRun
-"점프" 중에 `(DJGA_Parkour.h)`어빌리티 사용 시, <ins>특정 조건하에 Mantling 대신 WallRun 실행.</ins>
+"점프" 중에 `(DJGA_Parkour.h)`어빌리티 사용 시, <ins>특정 조건하에 Mantling 대신 WallRun 실행. (`DJAT_WallRun.h`)</ins>
 - **`조건`** : <옆 사선 벽><이동 방향과 이동 입력 방향 일치><속도, 현재 상승 속도 일정 이상 조건>
 - 속도에 따라 보폭 조절을 위해 몽타주가 아닌 링크 레이어 애니메이션으로 모션 실행. <int>(디스턴스 매칭과 Stride Warping 사용)</ins>
 <img src="https://github.com/thesun007/MotionPractice/assets/39186061/09b3613a-b67a-4692-8e54-0b85f096c4a3">
