@@ -299,7 +299,7 @@ c++에서 사용할 태그를 미리 준비.
 <br/>
 
 - 실질적인 액터 이동/회전과 진행 중 필요한 계산들은 <ins>**WallRun 태스크(`DJAT_WallRun.h`)**</ins> 에서 수행.
-- 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, **WallRun 태스크**에서 필요 값을 계산하고 넘겨 줌.
+- 애님 인스턴스에서 WallRun에 필요한 변수를 얻기 위해 Setter인터페이스를 적용하고, **WallRun 태스크**에서 필요 값을 계산하고 넘겨 줌.`AnimSourceSetInterface.h`
 > WallRun 시작 시, 현재 속도와 수직 상승 속도를 고려하여 이동한다.  
 > 바닥과 가까워지면 발을 디딛는다. ( WallRun 초기 상승 중일 땐 바닥이 있어도 무시한다.)
 <p align="center">
