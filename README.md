@@ -78,8 +78,8 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 
 ### 풀바디 링크된 레이어 애니메이션 시스템
 @<ins>애니메이션 블루프린트 링크 시스템</ins>을 적용한 라일라 애니메이션을 분석하고 이 기반으로 **C++과 블루프린트가 혼합된 애니메이션 시스템** 제작.  
-@**게임플레이 태그**와 **애님 인스턴스의 변수**를 매칭하여 태그 상태에 따라 변수가 변경되는 UE기능 (`FGameplayTagBlueprintPropertyMap`) 활용.  
-@외부에서 계산되어 setter가 필요한 변수를 위한 수단으로 **setter 전용 인터페이스(`IAnimSourceSetInterface`)**를 추가. (의존성 해소 목적)  
+@**게임플레이 태그**와 **애님 인스턴스의 변수**를 매칭하여 태그 상태에 따라 변수가 변경되는 UE기능인 (`FGameplayTagBlueprintPropertyMap`)을 활용.  
+@ 값이 외부에서 계산되어 setter가 필요한 애님 인스턴스의 멤버변수를 위한 수단으로 **setter 전용 인터페이스(`IAnimSourceSetInterface`)**를 추가. (의존성 해소 목적)  
 @현재 UnArmed 레이어 애니메이션만 구현.  
 <img src="https://github.com/thesun007/metal-slug/assets/39186061/7a8d4b97-17e1-4d15-b84b-2a6c6233ade2">
 
@@ -87,8 +87,18 @@ UE5 어빌리티 시스템 개발 방식 체득 목적
 - `UDJAnimInstance` : 위치/속도/방향/상태/회전 등 각종 데이터 계산.
 <br/>
 
-- 애님 레이어 인터페이스를 구현하는 `UDJLayerBaseAnimInstance`는 블루프린트로 로직 작성.
-- `UDJLayerBaseAnimInstance` : <Linked Anim Layer 구현>. 현 상태에서 실행할 애니메이션르 관련 변수 setter만 있음.
+- 애님 레이어 인터페이스의 정의를 구현하는 것은 `UDJLayerBaseAnimInstance`(Linked Anim Layer 의 인스턴스 클래스)를 기초클래스로 블루프린트(ABP_DJLayerBase)를 만들어 로직 작성.
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/06d25573-ac1b-4144-8e83-09bcd026791b">
+</p>
+<br/>
+
+- `UDJLayerBaseAnimInstance` 의 파생 블루프린트 : 사용할 애님 시퀀스 변수에 데이터 설정 (현재 비무장 애니메이션 에셋 용만 있음.)
+<p align="center">
+<img src="https://github.com/thesun007/MotionPractice/assets/39186061/a6ac5168-a3e0-4e5c-8629-aa22797fe560">
+</p>
+<br/>
+
 - **[구조도]** (메모 참고)
 <img src="https://github.com/thesun007/metal-slug/assets/39186061/3b9c6a90-cbef-44f0-a0ad-b4d8ed540fce">
 
