@@ -118,6 +118,7 @@ void UDJGA_Dash::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 		FLyraInteractionDurationMessage message;
 		message.Instigator = GetDJCharacterFromActorInfo();
 		message.Duration = GetCooldownTimeRemaining();
+		const FGameplayTagContainer* container = GetCooldownTags();
 		MySubsystem->BroadcastMessage(DASH_DURATION_MESSAGE, message);
 	}
 

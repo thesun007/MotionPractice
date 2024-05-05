@@ -16,7 +16,7 @@
 UDJAT_WallRun::UDJAT_WallRun()
 {
     bTickingTask = true;
-    
+
 }
 
 void UDJAT_WallRun::TickTask(float DeltaTime)
@@ -107,7 +107,7 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         FVector CheckDownDir = FVector(1, 0, -1);  //왼쪽 벽이었으면 앞 오른쪽 아래 방향 
         CheckDownDir.Normalize();
         CheckDownDir = FRotationMatrix(FRotator(0, Character->GetActorRotation().Yaw + 45 * -LeftRight, 0)).TransformVector(CheckDownDir);
-
+        
         FVector End = Start + CheckDownDir *300;    //(목표는 수직아래 거리 60이하되는 타이밍이라서 길이 100정도 잡음)
 
         Hit = GetWorld()->LineTraceSingleByObjectType(GroundHitResult, Start, End, FCollisionObjectQueryParams::AllStaticObjects, GroundQueryParams);   //지면 체크
