@@ -51,7 +51,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
 	bool bStopAtEnd = false;
 
-	/** Root motion is considered to be stopped at the clip's end */
+	/** 추출할 Bone 이름 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
 	FName BoneName;
 
