@@ -6,6 +6,7 @@
 #include "Character/DJCharacterMovementComponent.h"
 #include "Engine/AssetManager.h"
 #include "MotionWarpingComponent.h"
+#include "GAS/DJAbilitySystemComponent.h"
 
 // Sets default values
 ADJCharacterBase::ADJCharacterBase(const FObjectInitializer& ObjectInitializer)
@@ -73,6 +74,11 @@ void ADJCharacterBase::SetAnimLayer(EFullBodyPose pose)
 {
 	if(OtherAnimLayers.Find(pose))
 		GetMesh()->GetAnimInstance()->LinkAnimClassLayers(OtherAnimLayers[pose]);
+}
+
+UAbilitySystemComponent* ADJCharacterBase::GetAbilitySystemComponent() const
+{
+	return GetDJAbilitySystemComponent();
 }
 
 void ADJCharacterBase::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

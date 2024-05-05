@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Character/DJCharacterBase.h"
-#include "AbilitySystemInterface.h"
 #include "Tag/DJGameplayTags.h"
 #include "DJCharacterPlayer.generated.h"
 
@@ -14,7 +13,7 @@ struct FInputActionValue;
  * 
  */
 UCLASS()
-class DJGAME_API ADJCharacterPlayer : public ADJCharacterBase, public IAbilitySystemInterface
+class DJGAME_API ADJCharacterPlayer : public ADJCharacterBase
 {
 	GENERATED_BODY()
 	
@@ -26,10 +25,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "DJ|Character")
 	class ADJPlayerState* GetDJPlayerState() const;
-
-	UFUNCTION(BlueprintCallable, Category = "DJ|Character")
-	class UDJAbilitySystemComponent* GetDJAbilitySystemComponent() const;
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "DJ|Character")
 	FGameplayTagContainer& GetMoveInputBlockTag() {return MoveInputBlockTag;}
@@ -59,6 +54,9 @@ protected:
 	//void Input_AutoRun(const FInputActionValue& InputActionValue);
 
 private:
+	virtual void InitializeASC();
+
+private:
 	TObjectPtr<class UDJCharacterMovementComponent> DJMovementComponent;
 
 	//Ä«¸Þ¶ó
@@ -67,9 +65,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UDJCameraComponent> FollowCamera;
-	
-	UPROPERTY()
-	TObjectPtr<class UDJAbilitySystemComponent> ASC;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, Meta = (AllowPrivateAccess = "true"))
 	uint8 bMovementInputLock :1 ;

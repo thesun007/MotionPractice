@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "GameplayTagAssetInterface.h"
 #include "DJCharacterBase.generated.h"
+
+
 
 UENUM(BlueprintType)
 enum class EFullBodyPose : uint8
@@ -16,8 +19,8 @@ enum class EFullBodyPose : uint8
 	Shotgun
 };
 
-UCLASS()
-class DJGAME_API ADJCharacterBase : public ACharacter, public IGameplayTagAssetInterface
+UCLASS(abstract)
+class DJGAME_API ADJCharacterBase : public ACharacter, public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -30,6 +33,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Animation)
 	void SetAnimLayer(EFullBodyPose pose);
+
+	UFUNCTION(BlueprintCallable, Category = "DJ|CharacterBase")
+	UDJAbilitySystemComponent* GetDJAbilitySystemComponent() const { return ASC; }
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "MotionWarping")
 		UMotionWarpingComponent* GetMotionWarpingComponent() {return MotionWarpingComponent;}
@@ -46,8 +53,16 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void PostInitializeComponents() override;
+	
+	virtual void InitializeASC() PURE_VIRTUAL(ThisClass::InitializeASC, ;);
+
+protected:
+	// The ability system component sub-object used by player characters.
+	UPROPERTY(VisibleAnywhere, Category = "DJ|NPC")
+	TObjectPtr<class UDJAbilitySystemComponent> ASC;
 
 private:
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation, Meta = (AllowPrivateAccess = "true"))
 	TMap<EFullBodyPose, TSubclassOf<UAnimInstance>> OtherAnimLayers;
 

@@ -8,14 +8,15 @@
 #include "Net/UnrealNetwork.h"
 #include "DJCharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-
+#include "AbilitySystemGlobals.h"
+#include "AbilitySystemBlueprintLibrary.h"
 //#include "Components/SkeletalMeshComponent.h"
 #include "DJGame.h"
 
 ADJCharacterNPC::ADJCharacterNPC(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer.SetDefaultSubobjectClass<UDJCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
-	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<UDJAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+	ASC = ObjectInitializer.CreateDefaultSubobject<UDJAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
 	/*AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);*/
 	
@@ -35,11 +36,6 @@ ADJCharacterNPC::ADJCharacterNPC(const FObjectInitializer& ObjectInitializer)
 	}
 }
 
-UAbilitySystemComponent* ADJCharacterNPC::GetAbilitySystemComponent() const
-{
-	return GetDJAbilitySystemComponent(); 
-}
-
 void ADJCharacterNPC::SetPawnData(const UPawnData* InPawnData)
 {
 	check(InPawnData);
@@ -51,7 +47,7 @@ void ADJCharacterNPC::SetPawnData(const UPawnData* InPawnData)
 
 	if (PawnData)
 	{
-		DJ_LOG(DJLog, Error, TEXT("Trying to set PawnData [%s] on player state [%s] that already has valid PawnData [%s]."), *GetNameSafe((UObjectBaseUtility*)InPawnData), *GetNameSafe(this), *GetNameSafe((UObjectBaseUtility*)PawnData));
+		DJ_LOG(DJLog, Error, TEXT("Trying to set PawnData [%s] on player NPC [%s] that already has valid PawnData [%s]."), *GetNameSafe((UObjectBaseUtility*)InPawnData), *GetNameSafe(this), *GetNameSafe((UObjectBaseUtility*)PawnData));
 		return;
 	}
 
@@ -62,7 +58,7 @@ void ADJCharacterNPC::SetPawnData(const UPawnData* InPawnData)
 	{
 		if (AbilitySet)
 		{
-			AbilitySet->GiveToAbilitySystem(AbilitySystemComponent, nullptr, this);
+			AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
 		}
 	}
 
@@ -80,13 +76,25 @@ void ADJCharacterNPC::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void ADJCharacterNPC::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	
+	InitializeASC();
+}
+
+void ADJCharacterNPC::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	//ai 컨트롤러와 연결된 경우 호출됨.
+}
+
+void ADJCharacterNPC::InitializeASC()
+{
+	ASC->InitAbilityActorInfo(this, this);
 
 	for (const UDJAbilitySet* AbilitySet : PawnData->AbilitySets)
 	{
 		if (AbilitySet)
 		{
-			AbilitySet->GiveToAbilitySystem(AbilitySystemComponent, nullptr, this);
+			AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
 		}
 	}
 }

@@ -59,16 +59,6 @@ ADJPlayerState* ADJCharacterPlayer::GetDJPlayerState() const
 	return CastChecked<ADJPlayerState>(GetPlayerState(), ECastCheckedType::NullAllowed);
 }
 
-UDJAbilitySystemComponent* ADJCharacterPlayer::GetDJAbilitySystemComponent() const
-{
-	return ASC;
-}
-
-UAbilitySystemComponent* ADJCharacterPlayer::GetAbilitySystemComponent() const
-{
-	return ASC;
-}
-
 void ADJCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
@@ -103,57 +93,14 @@ void ADJCharacterPlayer::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	ADJPlayerState* OwnerPS = GetPlayerState<ADJPlayerState>();
-	if (OwnerPS)
-	{
-		ASC = OwnerPS->GetDJAbilitySystemComponent();
-		ASC->InitAbilityActorInfo(OwnerPS, this);
-
-		UDJAnimInstance* AnimInstance = Cast<UDJAnimInstance>(GetMesh()->GetAnimInstance());
-		if (AnimInstance)
-		{
-			AnimInstance->InitializeWithAbilitySystem(ASC);
-		}
-
-		//빙의됐을때, 캐릭터에 PawnData를 적용
-		const UPawnData* PawnData = GetDJPlayerState()->GetPawnData<UPawnData>();
-		for (const UDJAbilitySet* AbilitySet : PawnData->AbilitySets)
-		{
-			if (AbilitySet)
-			{
-				AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
-			}
-		}
-	}
+	InitializeASC();
 }
 
 void ADJCharacterPlayer::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	ADJPlayerState* OwnerPS = GetPlayerState<ADJPlayerState>();
-	if (OwnerPS)
-	{
-		ASC = OwnerPS->GetDJAbilitySystemComponent();
-		ASC->InitAbilityActorInfo(OwnerPS, this);
-
-		UDJAnimInstance* AnimInstance = Cast<UDJAnimInstance>(GetMesh()->GetAnimInstance());
-		if (AnimInstance)
-		{
-			AnimInstance->InitializeWithAbilitySystem(ASC);
-		}
-
-		//빙의됐을때, 캐릭터에 PawnData를 적용
-		const UPawnData* PawnData = GetDJPlayerState()->GetPawnData<UPawnData>();
-		for (const UDJAbilitySet* AbilitySet : PawnData->AbilitySets)
-		{
-			if (AbilitySet)
-			{
-				AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
-			}
-		}
-	}
-
+	InitializeASC();
 }
 
 void ADJCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -311,5 +258,31 @@ void ADJCharacterPlayer::Input_Crouch(const FInputActionValue& InputActionValue)
 	{
 		// If not crouched, crouch
 		Crouch();
+	}
+}
+
+void ADJCharacterPlayer::InitializeASC()
+{
+	ADJPlayerState* OwnerPS = GetPlayerState<ADJPlayerState>();
+	if (OwnerPS)
+	{
+		ASC = OwnerPS->GetDJAbilitySystemComponent();
+		ASC->InitAbilityActorInfo(OwnerPS, this);
+
+		UDJAnimInstance* AnimInstance = Cast<UDJAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+		{
+			AnimInstance->InitializeWithAbilitySystem(ASC);
+		}
+
+		//빙의됐을때, 캐릭터에 PawnData를 적용
+		const UPawnData* PawnData = GetDJPlayerState()->GetPawnData<UPawnData>();
+		for (const UDJAbilitySet* AbilitySet : PawnData->AbilitySets)
+		{
+			if (AbilitySet)
+			{
+				AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
+			}
+		}
 	}
 }
