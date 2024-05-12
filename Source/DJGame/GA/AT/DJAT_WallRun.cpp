@@ -214,7 +214,7 @@ UDJAT_WallRun* UDJAT_WallRun::CreateWallRunTask(UGameplayAbility* OwningAbility,
 void UDJAT_WallRun::Activate()
 {
     //Super::Activate();
-    //처음 실행 시, 아바타에 WALLRUN 태그 부여 (애니메이션 실행 위함)
+    //처음 실행 시, 아바타에 WALLRUN 태그 부여 (애니메이션 실행 위함- FGameplayTagBlueprintPropertyMap )
     AbilitySystemComponent.Get()->AddLooseGameplayTag(Tag_Status_Parkour_WallRun);
 
     //초기 스피드 가져오기

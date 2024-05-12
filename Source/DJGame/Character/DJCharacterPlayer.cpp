@@ -229,7 +229,7 @@ void ADJCharacterPlayer::Input_Move(const FInputActionValue& InputActionValue)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.X);
 		AddMovementInput(RightDirection, MovementVector.Y);
-
+		
 	}
 }
 
@@ -237,7 +237,7 @@ void ADJCharacterPlayer::Input_LookMouse(const FInputActionValue& InputActionVal
 {
 	//마우스 입력 같음
 	FVector2D LookAxisVector = InputActionValue.Get<FVector2D>() * 0.4;
-
+	
 	//컨트롤러의 ControlRotation 속성을 업데이트한다.
 	//결국 카메라 회전 (왜냐하면 스프링 암이 컨트롤러 로테이션 사용함)
 	AddControllerYawInput(LookAxisVector.X);

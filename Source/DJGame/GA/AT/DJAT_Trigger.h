@@ -17,22 +17,22 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTriggerDataDelegate, const FGamepla
 UCLASS()
 class DJGAME_API UDJAT_Trigger : public UAbilityTask
 {
+public:
 	GENERATED_BODY()
 	
-public:
-	UDJAT_Trigger();
+	UDJAT_Trigger(/*const FObjectInitializer& ObjectInitializer*/);
 
 	//~ UGameplayTask 재정의
 	virtual void TickTask(float DeltaTime) override;	// ticking Target Actor 실행
 	//~
 
 	//~ UAbilityTask 함수 재정의 및 필수 함수
-	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (DisplayName = "TriggerTask",
+	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (
 	HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "True"))
 		static UDJAT_Trigger* CreateTriggerTask(UGameplayAbility* OwningAbility, FName TaskInstanceName, TEnumAsByte<EGameplayTargetingConfirmation::Type> ConfirmationType, bool EnableTick,
 			TSubclassOf<AGameplayAbilityTargetActor> Class);
 
-	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (DisplayName = "TriggerTask",
+	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (
 	HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "True"))
 		static UDJAT_Trigger* CreateTriggerTaskUsingActor(UGameplayAbility* OwningAbility, FName TaskInstanceName, TEnumAsByte<EGameplayTargetingConfirmation::Type> ConfirmationType, bool EnableTick,
 			AGameplayAbilityTargetActor* TargetActor);
@@ -86,7 +86,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FTriggerDataDelegate	Canceled;
-
 	UPROPERTY()
 	TSubclassOf<AGameplayAbilityTargetActor> TargetClass;
 

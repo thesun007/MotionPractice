@@ -5,7 +5,9 @@
 #include "AbilitySystemComponent.h"
 //#include "EngineGlobals.h"
 //#include "Engine/Engine.h"
-UDJAT_Trigger::UDJAT_Trigger()
+
+UDJAT_Trigger::UDJAT_Trigger(/*const FObjectInitializer& ObjectInitializer*/)
+	/*: Super(ObjectInitializer)*/
 {
 	bTickingTask = false;
 }

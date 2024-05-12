@@ -28,7 +28,7 @@ public:
 	//~ UGameplayTask 재정의
 	virtual void TickTask(float DeltaTime) override;	// ticking Target Actor 실행
 
-	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (DisplayName = "TriggerTask",
+	UFUNCTION(BlueprintCallable, Category = "Ability Tasks", Meta = (DisplayName = "WallRunTask",
 	HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "True"))
 		static UDJAT_WallRun* CreateWallRunTask(UGameplayAbility* OwningAbility, FName TaskInstanceName, FVector StartWallPoint, FVector StartWallNormal,
 			bool Left, float _GapOffsetWithWall);

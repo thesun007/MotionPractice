@@ -56,6 +56,7 @@ ADJCharacterBase::ADJCharacterBase(const FObjectInitializer& ObjectInitializer)
 		GetMesh()->SetSkeletalMesh(CharacterMeshRef.Object);
 	}
 
+	
 	//애니메이션은 블루프린트를 가져와서 클래스로 등록
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/DJGame/Animations/ABP_DJCharacterMain.ABP_DJCharacterMain_C"));
 	if (AnimInstanceClassRef.Class)

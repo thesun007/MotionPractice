@@ -26,11 +26,6 @@ void UDJAnimInstance::NativeInitializeAnimation()
 	OwnerChar = Cast<ACharacter>(GetOwningActor());
 	if (OwnerChar)
 		Movement = Cast<UDJCharacterMovementComponent>( OwnerChar->GetCharacterMovement());
-
-	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OwnerChar))
-	{
-		InitializeWithAbilitySystem(ASC);
-	}
 }
 
 void UDJAnimInstance::NativeBeginPlay()
@@ -272,7 +267,7 @@ void UDJAnimInstance::SetYawOffset(float inYawOffset)
 void UDJAnimInstance::ProcessTurnCurve()
 {
 	float TurnYawWeight = 0.f;
-	float PreviousTurnCurveValue = CurrentTurnCurveValue;
+	float PreviousTurnCurveValue = CurrentTurnCurveValue;	//이전 회전값
 
 	bool IsCurrentTurning = GetCurveValue(TEXT("TurnYawWeight"), TurnYawWeight);
 
@@ -283,7 +278,7 @@ void UDJAnimInstance::ProcessTurnCurve()
 	}
 
 	float RemainingTurnYaw = 0.f;
-	GetCurveValue(TEXT("RemainingTurnYaw"), RemainingTurnYaw);
+	GetCurveValue(TEXT("RemainingTurnYaw"), RemainingTurnYaw);	// 남은 회전값 (in turn 애니메이션)
 
 	//남은 회전값 갱신
 	CurrentTurnCurveValue = RemainingTurnYaw / TurnYawWeight;

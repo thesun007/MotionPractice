@@ -352,7 +352,7 @@ void UDJGA_Parkour::ProcessMontage(UAnimMontage* _Montage, float StartTime)
 	Character->UnCrouch();
 	Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 	CurrentActorInfo->AbilitySystemComponent.Get()->AddLooseGameplayTag(Tag_Status_Parkour);
-
+	
 	//모션와핑 적용
 	UMotionWarpingComponent* MWC = Character->GetMotionWarpingComponent();
 	if (MWC)
