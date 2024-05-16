@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Animation/DistanceBoneModifier.h"
+#include "DistanceBoneModifier.h"
 #include "Animation/AnimSequence.h"
 #include "AnimationBlueprintLibrary.h"
 #include "EngineLogs.h"
 
 void UDistanceBoneModifier::OnApply_Implementation(UAnimSequence* Animation)
 {
+
 	if (Animation == nullptr)
 	{
 		UE_LOG(LogAnimation, Error, TEXT("DistanceCurveModifier failed. Reason: Invalid Animation"));
@@ -115,6 +116,7 @@ float UDistanceBoneModifier::CalculateMagnitudeSq(const FVector& Vector, EDistan
 {
 	switch (Axis)
 	{
+		//Square : Á¦°ö
 	case EDistanceBoneCurve_Axis::X:		return FMath::Square(FMath::Abs(Vector.X)); break;
 	case EDistanceBoneCurve_Axis::Y:		return FMath::Square(FMath::Abs(Vector.Y)); break;
 	case EDistanceBoneCurve_Axis::Z:		return FMath::Square(FMath::Abs(Vector.Z)); break;

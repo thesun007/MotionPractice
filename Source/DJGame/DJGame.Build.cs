@@ -32,7 +32,8 @@ public class DJGame : ModuleRules
             "CommonUI",
             "CommonGame",
             "CommonUser",
-            "NetCore"
+            "NetCore",
+            "EditorScriptingUtilities"
         });
 
         // Uncomment if you are using Slate UI
