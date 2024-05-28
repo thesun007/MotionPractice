@@ -97,7 +97,7 @@ void UBlockAxisRootBoneModifier::BlockAxis_Internal(UAnimSequence* Animation, bo
 	const int32 Num = Model->GetNumberOfKeys();
 	for (int32 AnimKey = 0; AnimKey < Num; AnimKey++)
 	{
-		// 현재 트랙 키(AnimKey) 에서의 루트 뼈 트랜스폼
+		// 현재 트랙 키(AnimKey) 에서의 루트 뼈 트랜스폼 얻기.
 		const FTransform RootTransformOriginal = Model->EvaluateBoneTrackTransform(RootBoneName, AnimKey, EAnimInterpolationType::Step);
 
 		// 현재 트랙 키(AnimKey) 에서의 새로운 루트 뼈 트랜스폼 계산
@@ -109,14 +109,20 @@ void UBlockAxisRootBoneModifier::BlockAxis_Internal(UAnimSequence* Animation, bo
 			RootTransformNew.SetLocation(CalculateMagnitude(RootTransformNew.GetLocation(), Axis));
 			NewRootKeys.Add(RootTransformNew);
 
+			// 이제 자식 뼈 트랜스폼 처리.
 			for (FName ChildBoneName : RootBoneChildBones)
 			{
 				FTransform ChildransformOriginal = Model->EvaluateBoneTrackTransform(ChildBoneName, AnimKey, EAnimInterpolationType::Step);
 
+				// 되돌리기를 위한 기존 정보 따로 저장
 				OriginChildKeys.FindOrAdd(ChildBoneName).Add(ChildransformOriginal);
+				
+				// 골반 아니라면 스킵.(속 빈 뼈 아이콘)
+				if (ChildBoneName.Compare(FName("pelvis")) != 0)
+					continue;
 
-				// 자식 뼈 트랜스폼을 메시 컴포넌트 기준(such as local to world) 으로 바꿧다가
-				ChildransformOriginal = ChildransformOriginal * RootTransformOriginal;
+				// 자식 뼈 로컬 트랜스폼을 메시 컴포넌트 기준(such as local to world) 으로 바꿧다가
+				ChildransformOriginal = ChildransformOriginal * RootTransformOriginal;	//크자이공부
 				// 새 루트 뼈 기준 로컬 트랜스폼으로 재 변환.
 				ChildransformOriginal = ChildransformOriginal.GetRelativeTransform(RootTransformNew);
 
@@ -136,6 +142,10 @@ void UBlockAxisRootBoneModifier::BlockAxis_Internal(UAnimSequence* Animation, bo
 
 			for (FName ChildBoneName : RootBoneChildBones)
 			{
+				// 골반 아니라면 스킵.(속 빈 뼈 아이콘)
+				if (ChildBoneName.Compare(FName("pelvis")) != 0)
+					continue;
+
 				temp.SetLocation(OriginChildKeys[ChildBoneName].Location[AnimKey]);
 				temp.SetRotation(OriginChildKeys[ChildBoneName].Rotation[AnimKey]);
 				temp.SetScale3D(OriginChildKeys[ChildBoneName].Scale[AnimKey]);
@@ -154,25 +164,52 @@ void UBlockAxisRootBoneModifier::BlockAxis_Internal(UAnimSequence* Animation, bo
 	// 자식 뼈의 새 전체 트랙 정보를 애니메이션에 적용
 	for (const FName& ChildBoneName : RootBoneChildBones)
 	{
+		// 골반 아니라면 스킵.(속 빈 뼈 아이콘)
+		if (ChildBoneName.Compare(FName("pelvis")) != 0)
+			continue;
+
 		const FBoneKeys& ChildKeys = NewChildKeys.FindChecked(ChildBoneName);
 		Controller.SetBoneTrackKeys(ChildBoneName, ChildKeys.Location, ChildKeys.Rotation, ChildKeys.Scale);
 	}
 
 	//** 애니메이션 데이터 편집 끝. **//
 	Controller.CloseBracket(bShouldTransact);
+
+	Animation->PostEditChange();
 }
 
 FVector UBlockAxisRootBoneModifier::CalculateMagnitude(const FVector& OriginLocation, EBlock_Axis _Axis)
 {
+	FVector TargetLocation(.0, .0, .0);
+	if (BlockType == EBlock_Type::Negative)
+	{
+		TargetLocation.X = OriginLocation.X < 0 ? 0 : OriginLocation.X;
+		TargetLocation.Y = OriginLocation.Y < 0 ? 0 : OriginLocation.Y;
+		TargetLocation.Z = OriginLocation.Z < 0 ? 0 : OriginLocation.Z;
+	}
+	else if (BlockType == EBlock_Type::Positive)
+	{
+		TargetLocation.X = OriginLocation.X > 0 ? 0 : OriginLocation.X;
+		TargetLocation.Y = OriginLocation.Y > 0 ? 0 : OriginLocation.Y;
+		TargetLocation.Z = OriginLocation.Z > 0 ? 0 : OriginLocation.Z;
+	}
+
 	switch (_Axis)
 	{
-	case EBlock_Axis::X:	return FVector(0.0, OriginLocation.Y, OriginLocation.Z); break;
-	case EBlock_Axis::Y:	return FVector(OriginLocation.X, 0.0, OriginLocation.Z); break;
-	case EBlock_Axis::Z:	return FVector(OriginLocation.X, OriginLocation.Y, 0.0); break;
-	case EBlock_Axis::XY:	return FVector(0.0, 0.0, OriginLocation.Z); break;
-	case EBlock_Axis::XZ:	return FVector(0.0, OriginLocation.Y, 0.0); break;
-	case EBlock_Axis::YZ:	return FVector(OriginLocation.X, 0.0, 0.0); break;
-	case EBlock_Axis::XYZ:	return FVector(0.0, 0.0, 0.0); break;
+	case EBlock_Axis::X:
+		return FVector(TargetLocation.X, OriginLocation.Y, OriginLocation.Z); break;
+	case EBlock_Axis::Y:	
+		return FVector(OriginLocation.X, TargetLocation.Y, OriginLocation.Z); break;
+	case EBlock_Axis::Z:	
+		return FVector(OriginLocation.X, OriginLocation.Y, TargetLocation.Z); break;
+	case EBlock_Axis::XY:	
+		return FVector(TargetLocation.X, TargetLocation.Y, OriginLocation.Z); break;
+	case EBlock_Axis::XZ:	
+		return FVector(TargetLocation.X, OriginLocation.Y, TargetLocation.Z); break;
+	case EBlock_Axis::YZ:	
+		return FVector(OriginLocation.X, TargetLocation.Y, TargetLocation.Z); break;
+	case EBlock_Axis::XYZ:	
+		return FVector(TargetLocation.X, TargetLocation.Y, TargetLocation.Z); break;
 	default: check(false); break;
 	}
 

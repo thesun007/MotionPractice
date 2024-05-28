@@ -17,6 +17,7 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_InputTag_Sliding, "InputTag.Ability.Sliding");
 UE_DEFINE_GAMEPLAY_TAG(TAG_AbilityType_Action_Sliding, "Ability.Type.Action.Sliding");
 
 UDJGA_Sliding::UDJGA_Sliding(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
@@ -102,7 +103,8 @@ void UDJGA_Sliding::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 
 
 		//** 정면 감시 시작 **//
-		TargetActorRadius = GetWorld()->SpawnActor<ATargetActor_TickableRadius>(CurrentActorInfo->AvatarActor.Get()->GetActorLocation(), CurrentActorInfo->AvatarActor.Get()->GetActorRotation());
+		TargetActorRadius = GetWorld()->SpawnActor<ATargetActor_TickableRadius>(CurrentActorInfo->AvatarActor.Get()->GetActorLocation(),
+			CurrentActorInfo->AvatarActor.Get()->GetActorRotation());
 
 		//라인 세팅
 		TargetActorRadius->Radius = 15;
@@ -288,8 +290,8 @@ void UDJGA_Sliding::ProcessMontageNTask(FVector Dir, float Strength)
 	OriginalDeceleration = Movement->BrakingDecelerationWalking;
 	Movement->BrakingDecelerationWalking = FinalDeceleration;
 	UAbilityTask_ApplyRootMotionConstantForce* AT_SlidingMove = UAbilityTask_ApplyRootMotionConstantForce::
-		ApplyRootMotionConstantForce(this, FName("SlidingMove"), Dir, Strength, Duration, false, nullptr, ERootMotionFinishVelocityMode::MaintainLastRootMotionVelocity,
-			FVector::ZeroVector, 0, true);
+		ApplyRootMotionConstantForce(this, FName("SlidingMove"), Dir, Strength, Duration, false, nullptr, 
+			ERootMotionFinishVelocityMode::MaintainLastRootMotionVelocity, FVector::ZeroVector, 0, true);
 	
 	//AT_SlidingMove->OnFinish.AddDynamic(this, &ThisClass::EndFunction);
 	AT_SlidingMove->ReadyForActivation();

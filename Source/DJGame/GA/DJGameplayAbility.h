@@ -16,7 +16,7 @@ enum class EDJAbilityActivationPolicy : uint8
 	// Continually try to activate the ability while the input is active. (인풋 이후에, 지속적으로 ActivateAbility() 실행됨.)
 	WhileInputActive,
 
-	// Try to activate the ability when an avatar is assigned. (스폰 시, 미리 ActivateAbility() 적용)
+	// Try to activate the ability when an avatar is assigned. (스폰 시, 미리 ActivateAbility() 적용, 이후 살아 있다면 입력시 InputPressed())
 	OnSpawn
 };
 

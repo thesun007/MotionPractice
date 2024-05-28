@@ -16,11 +16,8 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_InputTag_Dash, "InputTag.Ability.Dash");
 UE_DEFINE_GAMEPLAY_TAG(TAG_AbilityType_Action_Dash, "Ability.Type.Action.Dash");
 
 UDJGA_Dash::UDJGA_Dash(const FObjectInitializer& ObjectInitializer)
-	:Super(ObjectInitializer),
-	Strength(1850), Duration(0.25)
+	:Super(ObjectInitializer),Strength(1850), Duration(0.25)
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-
 	AbilityTags.AddTag(TAG_AbilityType_Action_Dash);
 	FAbilityTriggerData trigger;
 	trigger.TriggerTag = TAG_InputTag_Dash;

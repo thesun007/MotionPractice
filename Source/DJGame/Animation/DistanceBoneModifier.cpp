@@ -71,7 +71,7 @@ void UDistanceBoneModifier::OnApply_Implementation(UAnimSequence* Animation)
 		// TODO: This works for clips that are broken into starts/stops/pivots, but needs to be rethought for more complex clips.
 		const float ValueSign = (Time < TimeOfMinSpeed) ? -1.0f : 1.0f;
 
-		const FVector RootMotionTranslation = Animation->ExtractRootMotionFromRange(TimeOfMinSpeed, Time).GetTranslation();
+		//const FVector RootMotionTranslation = Animation->ExtractRootMotionFromRange(TimeOfMinSpeed, Time).GetTranslation();
 
 		FVector BonePose = FVector::ZeroVector;
 		int32 BoneIndex = Animation->GetSkeleton()->GetReferenceSkeleton().FindBoneIndex(BoneName);
@@ -79,6 +79,7 @@ void UDistanceBoneModifier::OnApply_Implementation(UAnimSequence* Animation)
 		while (BoneIndex >= 0)
 		{
 			//현재 본의 로컬 트랜스폼 (부모기준 트랜스폼) (즉, 로컬 좌표를 부모기준 좌표로 변환 함)
+			// 결국엔 최종 메시 스페이스기준 pose 가 계산 됨.
 			FTransform CurrentTransform;
 			Animation->GetBoneTransform(CurrentTransform, FSkeletonPoseBoneIndex(BoneIndex), Time, true);
 

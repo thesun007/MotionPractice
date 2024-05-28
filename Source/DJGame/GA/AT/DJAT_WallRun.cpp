@@ -231,7 +231,7 @@ void UDJAT_WallRun::Activate()
     Character->SetActorRotation(FRotationMatrix::MakeFromX(ForwardWithWall).Rotator());
     Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
     AnimSourceSetInterface->SetDirectionWall(bLeft);    //애님인스턴스에 벽 방향 전달
-    Character->GetCharacterMovement()->bUseControllerDesiredRotation = false;  
+    Character->GetCharacterMovement()->bUseControllerDesiredRotation = false;   // 캐릭터 자동회전 잠시 비활성 
     BeforePosition2D = FVector::ZeroVector;
     //Character->GetCapsuleComponent()->SetCapsuleRadius(10);
 }

@@ -148,7 +148,7 @@ bool UDJAT_Trigger::ShouldSpawnTargetActor() const
 {
 	check(TargetClass);
 	check(Ability);
-
+	
 	//로컬 컨트롤 이거나 리플리케이트 활성화 또는 서버에서 생성되는거면 true.
 	// (E.g., 서버는 이 대상 액터를 생성하여 소유하지 않은 모든 클라이언트에 복제합니다)
 
@@ -226,7 +226,7 @@ void UDJAT_Trigger::RegisterTargetDataCallbacks()
 	const bool bShouldProduceTargetDataOnServer = TA_CDO->ShouldProduceTargetDataOnServer;
 
 
-	if (!bIsLocallyControlled)	//현재 로컬 컨트롤이 아닌데,
+	if (!bIsLocallyControlled)	//현재 로컬 컨트롤이 아닌데, ( 현재 서버 & 이 객체는 원격autonomous)
 	{
 		// 타겟 액터가 클라이언트에서 실행되는 거면
 		// 클라이언트가 전송할 것으로 예상되는 경우 TargetData 콜백에 등록.
@@ -287,7 +287,8 @@ void UDJAT_Trigger::OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHa
 		}
 		else if (ConfirmationType == EGameplayTargetingConfirmation::UserConfirmed)	//서버에서 실행되는 타겟 액터이며, UserConfirm 모드이면
 		{
-			// 대상 데이터를 보내지 않을 것이지만 일반적인 컨펌 메시지를 보낼 것.(RPC) (아마 서버에서 직접 타겟 데이터를 얻을 것임) (AbilityReplicatedEventDelegate() 와 연계됨, BindToConfirmCancelInputs() 확인 )
+			// 대상 데이터를 보내지 않을 것이지만 일반적인 컨펌 메시지를 보낼 것.(RPC) 
+			//(아마 서버에서 직접 타겟 데이터를 얻을 것임) (AbilityReplicatedEventDelegate() 와 연계됨, BindToConfirmCancelInputs() 확인 )
 			ASC->ServerSetReplicatedEvent(EAbilityGenericReplicatedEvent::GenericConfirm, GetAbilitySpecHandle(), GetActivationPredictionKey(), ASC->ScopedPredictionKey);
 		}
 	}

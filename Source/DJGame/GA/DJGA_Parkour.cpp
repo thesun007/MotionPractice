@@ -20,8 +20,6 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_AbilityType_Action_Parkour, "Ability.Type.Action.Park
 UDJGA_Parkour::UDJGA_Parkour(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer), VaultStartPos(), VaultMiddlePos(), VaultEndPos()
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-
 	AbilityTags.AddTag(TAG_AbilityType_Action_Parkour);
 	FAbilityTriggerData trigger;
 	trigger.TriggerTag = TAG_InputTag_Parkour;
