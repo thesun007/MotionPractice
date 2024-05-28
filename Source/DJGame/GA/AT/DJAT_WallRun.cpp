@@ -130,7 +130,6 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         {
             LandingPoint = GroundHitResult.ImpactPoint;
             RunState = EWallRunState::End;
-            AbilitySystemComponent.Get()->RemoveLooseGameplayTag(Tag_Status_Parkour_WallRun);
         }
         else
         {
@@ -144,7 +143,7 @@ void UDJAT_WallRun::TickTask(float DeltaTime)
         /* wallrun 착지 모션 중 움직임 진행(랜딩) */
         float GroundDistance = Character->GetActorLocation().Z - Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - LandingPoint.Z;   //발바닥부터 착지 지점까지 수직거리 전달
 
-        if (Character->GetMesh()->GetAnimInstance()->WasAnimNotifyNameTriggeredInAnyState(FName("EnableFalling")))
+        if (Character->GetMesh()->GetAnimInstance()->WasAnimNotifyNameTriggeredInAnyState(FName("EndWallRun")))
         {
             OnCompleted();
             UE_LOG(LogTemp, Log, TEXT("on Falling"));
@@ -230,7 +229,8 @@ void UDJAT_WallRun::Activate()
     FVector ForwardWithWall = FVector::UpVector.Cross(CurrentWallNormal) * LeftRight;   //벽에 대한 앞 방향 설정
     Character->SetActorRotation(FRotationMatrix::MakeFromX(ForwardWithWall).Rotator());
     Character->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-    AnimSourceSetInterface->SetDirectionWall(bLeft);    //애님인스턴스에 벽 방향 전달
+    AnimSourceSetInterface->SetDirectionWall(bLeft);        //애님인스턴스에 벽 방향 전달
+    AnimSourceSetInterface->SetGroundDistanceByWallRun(100);    //지면 거리 우선 100으로 초기화
     Character->GetCharacterMovement()->bUseControllerDesiredRotation = false;   // 캐릭터 자동회전 잠시 비활성 
     BeforePosition2D = FVector::ZeroVector;
     //Character->GetCapsuleComponent()->SetCapsuleRadius(10);
