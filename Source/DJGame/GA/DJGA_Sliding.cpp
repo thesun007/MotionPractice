@@ -184,7 +184,7 @@ void UDJGA_Sliding::StartEnding()
 {
 	Movement->RemoveRootMotionSource(FName("SlidingMove"));
 	MontageJumpToSection("End");
-	
+
 	IsEnding = true;
 }
 
