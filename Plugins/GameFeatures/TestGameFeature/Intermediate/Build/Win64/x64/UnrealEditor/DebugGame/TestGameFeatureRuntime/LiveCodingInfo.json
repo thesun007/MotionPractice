@@ -1,8 +1,0 @@
-{
-	"RemapUnityFiles": 
-	{
-		"Module.TestGameFeatureRuntime.cpp.obj": [
-			"TestGameFeatureRuntimeModule.cpp.obj"
-		]
-	}
-}
