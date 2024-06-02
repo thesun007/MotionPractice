@@ -52,9 +52,9 @@ void UDJGA_Parkour::ProcessInNormal(const FGameplayAbilitySpecHandle Handle, con
 	//2. 전방 장애물 확인
 	float CapsuleHalfHeight = Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	float Range = 150.f;
-	float HalfHeight = (MaxHeight - CapsuleHalfHeight) * 0.5f;
+	float HalfHeight = (MaxHeight - CapsuleHalfHeight) * 0.5f;	// 콜리전용 캡슐 반높이
 	FVector ForwardDir = Character->GetActorForwardVector();
-
+	
 	FHitResult ForwardCheck;
 	FVector Start = Character->GetActorLocation() + FVector(0.0f, 0.0f, HalfHeight);		// 최대 높이 부터 캐릭 중앙까지 길이의 캡슐을 전방으로 발사
 	FVector End = Start + ForwardDir * Range;
@@ -79,7 +79,7 @@ void UDJGA_Parkour::ProcessInNormal(const FGameplayAbilitySpecHandle Handle, con
 		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
 		return;
 	}
-
+	
 
 	//3. 장애물 높이 + 착지 지점
 	uint8 MaxIndex = 4;

@@ -14,11 +14,11 @@ struct FDashMongtageDir
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UAnimMontage> Forward;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TObjectPtr<class UAnimMontage> Backward;
+	TObjectPtr<class UAnimMontage> Backward;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TObjectPtr<class UAnimMontage> Left;
+	TObjectPtr<class UAnimMontage> Left;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TObjectPtr<class UAnimMontage> Right;
+	TObjectPtr<class UAnimMontage> Right;
 };
 /**
  * 

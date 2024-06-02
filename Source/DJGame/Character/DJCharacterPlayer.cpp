@@ -13,7 +13,6 @@
 #include "DJCharacterMovementComponent.h"
 #include "Camera/DJCameraComponent.h"
 
-#include "Player/DJPlayerController.h"
 #include "Player/DJPlayerState.h"
 #include "GAS/DJAbilitySystemComponent.h"
 #include "PawnData.h"
@@ -22,7 +21,8 @@
 
 #include "Animation/DJAnimInstance.h"
 
-#include <type_traits>
+//#include <type_traits>
+#include <functional> // For std::bind
 
 ADJCharacterPlayer::ADJCharacterPlayer(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer.SetDefaultSubobjectClass<UDJCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
@@ -47,6 +47,8 @@ ADJCharacterPlayer::ADJCharacterPlayer(const FObjectInitializer& ObjectInitializ
 
 	MoveInputBlockTag.AddTag(Tag_Status_Parkour_WallRun);
 	//MoveInputBlockTag.AddTag(Tag_Status_Sliding);
+	
+	MoveFuncRef.BindDynamic(this, &ThisClass::DoMove);
 }
 
 ADJPlayerController* ADJCharacterPlayer::GetDJPlayerController() const
@@ -57,6 +59,10 @@ ADJPlayerController* ADJCharacterPlayer::GetDJPlayerController() const
 ADJPlayerState* ADJCharacterPlayer::GetDJPlayerState() const
 {
 	return CastChecked<ADJPlayerState>(GetPlayerState(), ECastCheckedType::NullAllowed);
+}
+
+void ADJCharacterPlayer::ResetMove()
+{
 }
 
 void ADJCharacterPlayer::BeginPlay()
@@ -113,7 +119,7 @@ void ADJCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 	{
 		//적용된 입력 맵핑 컨텍스트 모두 제거
-		Subsystem->ClearAllMappings(); 
+		Subsystem->ClearAllMappings();
 		//PlayerState에서 PawnData 가져와서 Input 바인딩
 		const UPawnData* PawnData =  GetDJPlayerState()->GetPawnData<UPawnData>();
 		if (PawnData)
@@ -160,6 +166,7 @@ void ADJCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 					DJIC->BindNativeAction(InputData, INPUTTAG_JUMP, ETriggerEvent::Triggered, this, &ThisClass::Jump, /*bLogIfNotFound=*/ false);
 					DJIC->BindNativeAction(InputData, INPUTTAG_JUMP, ETriggerEvent::Completed, this, &ThisClass::StopJumping, /*bLogIfNotFound=*/ false);
 					//DJIC->BindNativeAction(InputData, InputTag_AutoRun, ETriggerEvent::Triggered, this, &ThisClass::Input_AutoRun, /*bLogIfNotFound=*/ false);
+					
 				}
 			}
 		}
@@ -203,34 +210,8 @@ void ADJCharacterPlayer::Input_AbilityInputTagReleased(FGameplayTag InputTag)
 
 void ADJCharacterPlayer::Input_Move(const FInputActionValue& InputActionValue)
 {
-	// input is a Vector2D
-	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		//파쿠르 중이라면 키입력 무빙 무시
-		FGameplayTagContainer tags;
-		ASC->GetOwnedGameplayTags(tags);
-		if(tags.IsEmpty() == false && tags.HasAnyExact(MoveInputBlockTag))
-		{
-			return;
-		}
-
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();	// 컨트롤 각도 = 카메라 방향
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// 카메라(컨트롤) 기준 forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);	//현재 앞 방향.
-
-		// 카메라(컨트롤) 기준 right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.X);
-		AddMovementInput(RightDirection, MovementVector.Y);
-		
-	}
+	if (MoveFuncRef.IsBound())
+		MoveFuncRef.Execute(InputActionValue);
 }
 
 void ADJCharacterPlayer::Input_LookMouse(const FInputActionValue& InputActionValue)
@@ -284,5 +265,37 @@ void ADJCharacterPlayer::InitializeASC()
 				AbilitySet->GiveToAbilitySystem(ASC, nullptr, this);
 			}
 		}
+	}
+}
+
+void ADJCharacterPlayer::DoMove(const FInputActionValue& InputActionValue)
+{
+	// input is a Vector2D
+	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		//파쿠르 중이라면 키입력 무빙 무시
+		FGameplayTagContainer tags;
+		ASC->GetOwnedGameplayTags(tags);
+		if (tags.IsEmpty() == false && tags.HasAnyExact(MoveInputBlockTag))
+		{
+			return;
+		}
+
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();	// 컨트롤 각도 = 카메라 방향
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// 카메라(컨트롤) 기준 forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);	//현재 앞 방향.
+
+		// 카메라(컨트롤) 기준 right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.Y);
+
 	}
 }

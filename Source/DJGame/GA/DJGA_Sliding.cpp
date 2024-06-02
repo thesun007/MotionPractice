@@ -19,8 +19,6 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_AbilityType_Action_Sliding, "Ability.Type.Action.Slid
 UDJGA_Sliding::UDJGA_Sliding(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-
 	AbilityTags.AddTag(TAG_AbilityType_Action_Sliding);
 	FAbilityTriggerData trigger;
 	trigger.TriggerTag = TAG_InputTag_Sliding;
@@ -191,7 +189,7 @@ void UDJGA_Sliding::StartEnding()
 void UDJGA_Sliding::CheckUpper()
 {
 	//일어날 때, crouch? or uncrouch
-	FVector Pos = Character->GetActorLocation() + FVector(0.0, 0.0, Character->GetSimpleCollisionHalfHeight() * 2 - Movement->CrouchedHalfHeight);
+	FVector Pos = Character->GetActorLocation() + FVector(0.0, 0.0, Character->GetSimpleCollisionHalfHeight() * 2 - Movement->GetCrouchedHalfHeight());
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(RadiusTargetingOverlap), false, Character);
 	Params.bReturnPhysicalMaterial = false;
 

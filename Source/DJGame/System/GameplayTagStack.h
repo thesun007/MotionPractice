@@ -85,7 +85,7 @@ private:
 	UPROPERTY()
 	TArray<FGameplayTagStack> Stacks;
 	
-	// Accelerated list of tag stacks for queries
+	// Accelerated list of tag stacks for queries	( 이용자 편의)
 	TMap<FGameplayTag, int32> TagToCountMap;
 };
 

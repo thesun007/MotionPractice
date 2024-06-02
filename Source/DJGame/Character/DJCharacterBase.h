@@ -58,7 +58,7 @@ protected:
 
 protected:
 	// The ability system component sub-object used by player characters.
-	UPROPERTY(VisibleAnywhere, Category = "DJ|NPC")
+	UPROPERTY(VisibleAnywhere, Category = "DJ|", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UDJAbilitySystemComponent> ASC;
 
 private:

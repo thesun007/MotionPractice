@@ -13,7 +13,7 @@ void UDJInputComponent::AddInputMappings(const UDJInputData* InputConfig, UEnhan
 	check(InputConfig);
 	check(InputSubsystem);
 
-	//커스텀 InputData를 추가로 인풋 로직에 추가
+	//필요한 경우 InputConfig에서 무언가를 추가하기 위해, 사용자 정의 논리를 여기서 처리할 수 있습니다.
 }
 
 void UDJInputComponent::RemoveInputMappings(const UDJInputData* InputConfig, UEnhancedInputLocalPlayerSubsystem* InputSubsystem) const

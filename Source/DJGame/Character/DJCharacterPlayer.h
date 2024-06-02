@@ -9,6 +9,9 @@
 
 struct FGameplayTag;
 struct FInputActionValue;
+
+DECLARE_DYNAMIC_DELEGATE_OneParam(FInputFunc, const FInputActionValue&, inputvalue);
+
 /**
  * 
  */
@@ -28,6 +31,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "DJ|Character")
 	FGameplayTagContainer& GetMoveInputBlockTag() {return MoveInputBlockTag;}
+
+	
+	void ResetMove();
+
+public:
+	UPROPERTY(BlueprintReadWrite, Category = "Callback")
+	FInputFunc MoveFuncRef;		// 무브 
 
 protected:
 	//~ AActor 재정의
@@ -55,9 +65,9 @@ protected:
 
 private:
 	virtual void InitializeASC();
-
+	UFUNCTION()
+	void DoMove(const FInputActionValue& InputActionValue);
 private:
-	TObjectPtr<class UDJCharacterMovementComponent> DJMovementComponent;
 
 	//카메라
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, Meta = (AllowPrivateAccess = "true"))

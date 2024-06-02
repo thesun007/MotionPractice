@@ -18,6 +18,7 @@ public:
 	UDJAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	typedef TFunctionRef<bool(const class UDJGameplayAbility* Ability, FGameplayAbilitySpecHandle Handle)> TShouldCancelAbilityFunc;
+	// 등록&Active 중인 어빌리티가 함수 객체에 의해 true를 반환하면 취소된다.
 	void CancelAbilitiesByFunc(TShouldCancelAbilityFunc ShouldCancelFunc, bool bReplicateCancelAbility);
 
 	void CancelInputActivatedAbilities(bool bReplicateCancelAbility);

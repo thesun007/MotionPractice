@@ -109,8 +109,8 @@ public:
 
 	UDJAbilitySet(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	// Grants the ability set to the specified ability system component.
-	// The returned handles can be used later to take away anything that was granted.
+	// 어빌리티 멤버들을 해당 ASC에 등록.
+	// 반환된 핸들은 나중에 부여된 모든 항목을 제거하는 데 사용될 수 있습니다.
 	void GiveToAbilitySystem(class UDJAbilitySystemComponent* ASC, FDJAbilitySet_GrantedHandles* OutGrantedHandles, UObject* SourceObject = nullptr) const;
 
 protected:

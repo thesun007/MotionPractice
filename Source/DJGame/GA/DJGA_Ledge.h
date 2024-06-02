@@ -24,6 +24,13 @@ protected:
 	virtual void InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 	//~ 끝
 
+	//~ UDJGameplayAbility 함수 재정의
+	void SetInputAction() override;
+	//~ 끝
+
+private:
+	void Move(const FInputActionValue& InputActionValue);
+
 private:
 	UPROPERTY()
 	TObjectPtr<class ADJCharacterBase> Character;

@@ -45,4 +45,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DJ|Mapping")
 	TArray<FInputMappingContextAndPriority> InputMappings;
+
+
 };

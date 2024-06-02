@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "EnhancedInputComponent.h"
+#include "Input/DJInputData.h"
+#include "DJGame.h"
 #include "DJGameplayAbility.generated.h"
 
 
@@ -20,11 +23,10 @@ enum class EDJAbilityActivationPolicy : uint8
 	OnSpawn
 };
 
-
 /**
  * 
  */
-UCLASS(Abstract, HideCategories = Input, Meta = (ShortTooltip = "The base gameplay ability class used by this project."))
+UCLASS(Abstract, Meta = (ShortTooltip = "The base gameplay ability class used by this project."))
 class DJGAME_API UDJGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
@@ -53,15 +55,59 @@ public:
 
 protected:
 	//~UGameplayAbility interface
+	virtual bool CommitAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, 
+		const FGameplayAbilityActivationInfo ActivationInfo, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) override;
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, 
+		const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	//~End
 
 	/** Called when this ability is granted to the ability system component. */
 	UFUNCTION(BlueprintImplementableEvent, Category = Ability, DisplayName = "OnAbilityAdded")
 	void K2_OnAbilityAdded();
 
+	//사용자 입력 바인딩 재정의용
+	virtual void SetInputAction();
+	template<class UserClass, typename FuncType>
+	void BindNativeAction(const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func, bool bLogNotFound);
+
+private:
+	// 입력 설정(Commit 에서 호출 됨)
+	void InitInputMapping();
+	// 입력 제거 (EndAbility 에서 호출 됨)
+	void RemoveInputMapping();
+
 protected:
 	// Defines how this ability is meant to activate.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|Ability Activation")
 	EDJAbilityActivationPolicy ActivationPolicy;
+
+private:
+	//* 입력 섹션 *//
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DJ|Input", meta = (AllowPrivateAccess = "true"))
+	TSoftObjectPtr<class UInputMappingContext> InputMapping;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DJ|Input", meta = (AllowPrivateAccess = "true"))
+	TArray<FDJInputAction> NativeInputActions;
+	TArray<uint32> InputHandles;
+	UPROPERTY()
+	TObjectPtr<UEnhancedInputComponent> InputComponent;
 };
+
+template<class UserClass, typename FuncType>
+void UDJGameplayAbility::BindNativeAction(const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func, bool bLogNotFound)
+{
+	check(InputComponent);
+	for (const auto& NativeInput : NativeInputActions)
+	{
+		if (NativeInput.InputAction && (NativeInput.InputTag == InputTag))
+		{
+			InputHandles.Add(InputComponent->BindAction(NativeInput.InputAction, TriggerEvent, Object, Func).GetHandle());
+			return;
+		}
+	}
+
+	if (bLogNotFound)
+	{
+		DJ_LOG(DJLog, Error, TEXT("Can't find NativeInputAction for InputTag [%s] on NativeInputActions."), *InputTag.ToString());
+	}
+}

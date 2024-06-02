@@ -48,6 +48,7 @@ DJGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Tag_Status_Parkour);
 DJGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Tag_Status_Parkour_WallRun);
 DJGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Tag_Status_Dashing);
 DJGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Tag_Status_Sliding);
+DJGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Tag_Status_Ledge);
 
 // These are mappings from MovementMode enums to GameplayTags associated with those enums (below)
 DJGAME_API	extern const TMap<uint8, FGameplayTag> MovementModeTagMap;

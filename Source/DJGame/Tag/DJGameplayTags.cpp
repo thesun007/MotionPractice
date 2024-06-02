@@ -42,6 +42,7 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Death_Dead, "Status.Death.Dead", "Target h
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Facing, "Status.Facing", "Target is facing Player");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Dashing, "Status.Dashing", "Target is Dashing");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Sliding, "Status.Sliding", "Target is Sliding");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Ledge, "Status.Ledge", "Target is Ledge");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Assassinationing, "Status.Assassinationing", "Target is Assassinationing");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Parkour, "Status.Parkour", "Target is Assassinationing");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tag_Status_Parkour_WallRun, "Status.Parkour.WallRun", "Target is Wall Running");

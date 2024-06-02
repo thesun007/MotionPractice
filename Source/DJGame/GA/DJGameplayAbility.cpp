@@ -4,6 +4,11 @@
 #include "GA/DJGameplayAbility.h"
 #include "AbilitySystemComponent.h"
 
+#include "Player/DJPlayerController.h"
+#include "Character/DJCharacterBase.h"
+#include "InputMappingContext.h"
+#include "EnhancedInputSubsystems.h"
+
 #include UE_INLINE_GENERATED_CPP_BY_NAME(DJGameplayAbility)
 
 UDJGameplayAbility::UDJGameplayAbility(const FObjectInitializer& ObjectInitializer)
@@ -89,6 +94,83 @@ void UDJGameplayAbility::TryActivateAbilityOnSpawn(const FGameplayAbilityActorIn
 	}
 }
 
+void UDJGameplayAbility::InitInputMapping()
+{
+	if (InputMapping.IsNull())	//입력 정보 없으면 그냥 통과
+		return;
+
+	ADJPlayerController* PC = GetDJPlayerControllerFromActorInfo();
+	ADJCharacterBase* Character = GetDJCharacterFromActorInfo();
+	if (PC == nullptr || Character == nullptr)
+		return;
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+	{
+		if ((InputComponent = Cast<UEnhancedInputComponent>(Character->InputComponent)) == nullptr)
+			return;
+
+		InputMapping.LoadSynchronous();
+		if (UInputMappingContext* IMC = InputMapping.Get())
+		{
+			FModifyContextOptions Options = {};
+			Options.bIgnoreAllPressedKeysUntilRelease = false;
+			Subsystem->AddMappingContext(IMC, 1, Options);
+
+			SetInputAction();
+		}
+	}
+	else
+		return ;
+}
+
+void UDJGameplayAbility::SetInputAction()
+{
+}
+
+void UDJGameplayAbility::RemoveInputMapping()
+{
+	if (InputMapping == nullptr)	//입력 정보 없으면 그냥 통과
+		return;
+
+	ADJPlayerController* PC = GetDJPlayerControllerFromActorInfo();
+	if (PC == nullptr)
+		return;
+
+	if (InputComponent)
+	{
+		if (InputHandles.IsEmpty())
+			return;
+
+		for (uint32 handle : InputHandles)
+		{
+			InputComponent->RemoveActionBindingForHandle(handle);
+		}
+
+	}
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+	{
+		InputMapping.LoadSynchronous();
+		if (UInputMappingContext* IMC = InputMapping.Get())
+		{
+			FModifyContextOptions Options = {};
+			Options.bIgnoreAllPressedKeysUntilRelease = false;
+			Subsystem->RemoveMappingContext(IMC, Options);
+		}
+	}
+
+}
+
+bool UDJGameplayAbility::CommitAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, OUT FGameplayTagContainer* OptionalRelevantTags)
+{
+	bool result = Super::CommitAbility(Handle, ActorInfo, ActivationInfo, OptionalRelevantTags);
+	if (!result)
+		return result;
+
+	InitInputMapping();
+	return true;
+}
+
 void UDJGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnGiveAbility(ActorInfo, Spec);
@@ -96,4 +178,10 @@ void UDJGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInf
 	K2_OnAbilityAdded();
 
 	TryActivateAbilityOnSpawn(ActorInfo, Spec);
+}
+
+void UDJGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	RemoveInputMapping();
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
